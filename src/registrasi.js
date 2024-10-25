@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { 
-  Box, Button, Grid, TextField, MenuItem, Paper, Typography 
+  Box, Button, Grid, TextField, MenuItem, Paper
 } from '@mui/material';
 import { styled } from '@mui/system';
 import Logo from './assets/images/logopilmapres.png';
