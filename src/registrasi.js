@@ -21,6 +21,8 @@ function Registrasi() {
   const [formData, setFormData] = useState({
     namaLengkap: '',
     nim: '',
+    username: '',
+    password: '',
     tempat: '',
     tanggalLahir: '',
     jenisKelamin: '',
@@ -117,7 +119,31 @@ function Registrasi() {
                 helperText={errors.nim}
               />
             </Grid>
-        
+            <Grid item xs={12}>
+              <TextField
+                label="Username"
+                name="username"
+                fullWidth
+                variant="outlined"
+                value={formData.username}
+                onChange={handleChange}
+                error={!!errors.username}
+                helperText={errors.username}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                label="Password"
+                name="password"
+                type="password"
+                fullWidth
+                variant="outlined"
+                value={formData.password}
+                onChange={handleChange}
+                error={!!errors.password}
+                helperText={errors.password}
+              />
+            </Grid>
             <Grid item xs={4}>
               <TextField
                 label="Tempat"
