@@ -11,6 +11,7 @@ import Registrasi from './registrasi';
 import DashboardAdmin from './dashboardadmin';
 import DataPengguna from './datapengguna';
 import BerkasAdminCU from './berkasadmincu';
+import JadwalPresentasi from './jadwalpresentasi';
 function App() {
   return (
       <Router>
@@ -26,6 +27,7 @@ function App() {
           <Route path="/dashboardadmin" element={<DashboardAdmin />} ></Route>
           <Route path="/datapengguna" element={<DataPengguna />} ></Route>
           <Route path="/berkasadmincu" element={<BerkasAdminCU />} ></Route>
+          <Route path="/jadwalpresentasi" element={<JadwalPresentasi />} ></Route>
         </Routes>
       </Router>
   );

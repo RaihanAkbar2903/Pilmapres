@@ -16,43 +16,75 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import Logo from './assets/images/logopilmapres.png';
 import { useNavigate } from 'react-router-dom';
 
-function DataPengguna() {
+function JadwalPresentasi() {
     const [openLaman, setOpenLaman] = useState(false);
     const [openEdit, setOpenEdit] = useState(false); 
-    const [openDelete, setOpenDelete] = useState(false);  
-    const [selectedUser, setSelectedUser] = useState(null); 
-    const [editedUser, setEditedUser] = useState({
-        username: '',
-        password: '',
-        role: '',
+    const [openDelete, setOpenDelete] = useState(false);
+    const [openTambah, setOpenTambah] = useState(false);
+    const [newJadwal, setNewJadwal] = useState({
+        peserta: '',
+        haritanggal: '',
+        tempat: '',
+        waktu: '',
+    }); 
+
+    const [selectedJadwal, setSelectedJadwal] = useState(null); 
+    const [editedJadwal, setEditedJadwal] = useState({
+        peserta: '',
+        haritanggal: '',
+        tempat: '',
+        waktu: '',
     });
     const [anchorEl, setAnchorEl] = useState(null);
     const navigate = useNavigate();
 
-    const handleEditClick = (user) => {
-        setSelectedUser(user);
-        setEditedUser({ ...user, password: user.id }); 
+    const handleTambahClick = () => {
+        setNewJadwal({
+            peserta: '',
+            haritanggal: '',
+            tempat: '',
+            waktu: '',
+         });
+         setOpenTambah(true);
+    }
+
+    const handleSaveTambah = () => {
+        console.log("Data Jadwal Baru: ", newJadwal);
+        setOpenTambah(false);
+    };
+
+    const handleChangeTambah = (e) => {
+        const { name, value} = e.target;
+        setNewJadwal((prevState) => ({
+            ...prevState,
+            [name]: value,
+        }));
+    };
+
+    const handleEditClick = (jadwal) => {
+        setSelectedJadwal(jadwal);
+        setEditedJadwal({ peserta: jadwal.peserta, haritanggal: jadwal.haritanggal, tempat: jadwal.tempat, waktu: jadwal.waktu }); 
         setOpenEdit(true); 
     };
 
-    const handleDeleteClick = (user) => {
-        setSelectedUser(user);
+    const handleDeleteClick = (jadwal) => {
+        setSelectedJadwal(jadwal);
         setOpenDelete(true); 
     };
 
     const handleSaveEdit = () => {
-        console.log("Data yang diubah:", editedUser);
+        console.log("Data jadwal yang diubah:", editedJadwal);
         setOpenEdit(false);
     };
 
     const handleDeleteConfirm = () => {
-        console.log("Data yang dihapus:", selectedUser);
+        console.log("Data jadwal yang dihapus:", selectedJadwal);
         setOpenDelete(false);
     };
 
     const handleChange = (e) => {
         const { name, value } = e.target;
-        setEditedUser((prevState) => ({
+        setEditedJadwal((prevState) => ({
             ...prevState,
             [name]: value,
         }));
@@ -62,13 +94,10 @@ function DataPengguna() {
         setOpenLaman(!openLaman);
     };
 
-    const pengguna = [
-        { id: '001', username: 'Sesa Febrius Trialaka', role: 'Peserta' },
-        { id: '002', username: 'Satria Bintang Putra', role: 'Juri' },
-        { id: '003', username: 'Maudy Rahayu', role: 'Juri' },
-        { id: '004', username: 'Cecilia Pratiwi', role: 'Peserta' },
-        { id: '005', username: 'Ahmad Solihin', role: 'Admin' },
-        { id: '006', username: 'Claudy Manaud', role: 'Admin' },
+    const jadwal = [
+        { no: '1', peserta: 'Sesa Febrius Trialaka', haritanggal: '2024-10-01', tempat: 'Ruang A', waktu: '10:00' },
+        { no: '2', peserta: 'Satria Bintang Putra', haritanggal: '2024-10-02', tempat: 'Ruang B', waktu: '13:00' },
+        { no: '3', peserta: 'Maudy Rahayu', haritanggal: '2024-10-03', tempat: 'Ruang C', waktu: '15:00' }
     ];
 
     const handleAccountClick = (event) => {
@@ -240,7 +269,7 @@ function DataPengguna() {
             <Box sx={{ flexGrow: 1}}>
                 <Paper elevation={1} sx={{ padding: 2, marginBottom: 3, backgroundColor: '#003366', borderRadius: 0 }}>
                     <Typography variant="h4" sx={{ color: '#FFFFFF' }}>
-                        Data Pengguna
+                        Kelola Jadwal
                     </Typography>
                     <IconButton
                             color="inherit"
@@ -262,9 +291,10 @@ function DataPengguna() {
                     <Grid item xs={12}>
                         <Paper sx={{ padding: 1, backgroundColor: '#FFFFFF' }}>
                             <Typography variant="h3" gutterBottom sx={{ fontWeight: 'bold', color: '#1E376D', textAlign: 'center', marginBottom: 4 }}>
-                                Pengguna
+                                Jadwal Presentasi
                             </Typography>
-                            <Button 
+                            <Button
+                                onClick={handleTambahClick}
                                 variant="contained" 
                                 color="primary" 
                                 sx={{ marginBottom: 2, backgroundColor: '#003366', minWidth: '20vh' }}
@@ -276,19 +306,21 @@ function DataPengguna() {
                                     <TableHead sx={{ backgroundColor: '#1E376D' }}>
                                         <TableRow >
                                             <TableCell sx={{ color: '#FFFFFF'}}>No</TableCell>
-                                            <TableCell sx={{ color: '#FFFFFF'}}>ID User</TableCell>
-                                            <TableCell sx={{ color: '#FFFFFF'}}>Nama User</TableCell>
-                                            <TableCell sx={{ color: '#FFFFFF'}}>Role</TableCell>
+                                            <TableCell sx={{ color: '#FFFFFF'}}>Peserta</TableCell>
+                                            <TableCell sx={{ color: '#FFFFFF'}}>Hari/Tanggal</TableCell>
+                                            <TableCell sx={{ color: '#FFFFFF'}}>Waktu</TableCell>
+                                            <TableCell sx={{ color: '#FFFFFF'}}>Tempat</TableCell>
                                             <TableCell sx={{ color: '#FFFFFF'}}>Aksi</TableCell>
                                         </TableRow>
                                     </TableHead>
                                     <TableBody>
-                                        {pengguna.map((row, index) => (
-                                            <TableRow key={row.id}  sx={{ backgroundColor: index % 2 === 0 ? '#E8F0FE' : '#ffffff'}}>
-                                                <TableCell>{index + 1}</TableCell>
-                                                <TableCell>{row.id}</TableCell>
-                                                <TableCell>{row.username}</TableCell>
-                                                <TableCell>{row.role}</TableCell>
+                                        {jadwal.map((row, index) => (
+                                            <TableRow key={row.no}  sx={{ backgroundColor: index % 2 === 0 ? '#E8F0FE' : '#ffffff'}}>
+                                                <TableCell>{row.no}</TableCell>
+                                                <TableCell>{row.peserta}</TableCell>
+                                                <TableCell>{row.haritanggal}</TableCell>
+                                                <TableCell>{row.tempat}</TableCell>
+                                                <TableCell>{row.waktu}</TableCell>
                                                 <TableCell>
                                                     <IconButton color='primary' onClick={() => handleEditClick(row)}>
                                                         <EditIcon/>
@@ -308,59 +340,116 @@ function DataPengguna() {
             </Box>
             <Dialog open={openEdit} onClose={() => setOpenEdit(false)} sx={{ '& .MuiDialog-paper': { backgroundColor: '#003366', borderRadius: '8px', color: 'white', width: '100%' } }} >
                 <DialogTitle>
-                    Edit Pengguna
+                    Edit Jadwal
                 </DialogTitle>
                 <DialogContent>
-                    <InputLabel sx={{ color:'white' }} >Username</InputLabel>
+                    <InputLabel sx={{ color:'white' }} >Peserta</InputLabel>
                     <TextField
                         margin="dense"
                         type="text"
                         fullWidth
-                        name="username"
-                        value={editedUser.username}
+                        name="peserta"
+                        value={editedJadwal.peserta}
                         onChange={handleChange}
                         sx={{ backgroundColor: '#FFFFFF', borderRadius: '4px' }}
                     />
-                    <InputLabel sx={{ color:'white' }} >Password</InputLabel>
+                    <InputLabel sx={{ color:'white' }} >Hari/Tanggal</InputLabel>
                     <TextField 
                         margin="dense"
-                        type="password"
+                        type="date"
                         fullWidth
-                        name="password"
-                        value={editedUser.password}
+                        name="haritanggal"
+                        value={editedJadwal.haritanggal}
                         onChange={handleChange}
                         sx={{ backgroundColor: '#FFFFFF', borderRadius: '4px' }}
                     />
-                    <InputLabel sx={{ color:'white' }} >Role</InputLabel>
-                    <FormControl fullWidth margin="dense">
-                        <Select
-                            value={editedUser.role}
-                            onChange={handleChange}
-                            sx={{ backgroundColor: '#FFFFFF', borderRadius: '4px' }}
-                        >
-                            <MenuItem value="Peserta"> Mahasiswa </MenuItem>
-                            <MenuItem value="Juri"> Juri </MenuItem>
-                            <MenuItem value="Admin"> Admin </MenuItem>
-                        </Select>
-                    </FormControl>
+                    <InputLabel sx={{ color:'white' }} >Tempat</InputLabel>
+                    <TextField 
+                        margin="dense"
+                        type="text"
+                        fullWidth
+                        name="tempat"
+                        value={editedJadwal.tempat}
+                        onChange={handleChange}
+                        sx={{ backgroundColor: '#FFFFFF', borderRadius: '4px' }}
+                    />
+                    <InputLabel sx={{ color:'white' }} >Waktu</InputLabel>
+                    <TextField 
+                        margin="dense"
+                        type="text"
+                        fullWidth
+                        name="waktu"
+                        value={editedJadwal.waktu}
+                        onChange={handleChange}
+                        sx={{ backgroundColor: '#FFFFFF', borderRadius: '4px' }}
+                    />
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={() => setOpenEdit(false)} sx={{ backgroundColor: '#FE651F', color: '#FFFFFF', borderRadius: '4px'  }} >Batal</Button>
                     <Button onClick={handleSaveEdit} sx={{ backgroundColor: '#0DBD2E', color: '#FFFFFF', borderRadius: '4px'}} >Simpan</Button>
                 </DialogActions>
             </Dialog>
-            <Dialog open={openDelete} onClose={() => setOpenDelete(false)}>
+            <Dialog open={openDelete} onClose={() => setOpenDelete(false)} sx={{ '& .MuiDialog-paper': { backgroundColor: '#003366', borderRadius: '8px', color: 'white', width: '100%' } }} >
                 <DialogTitle>Konfirmasi Hapus</DialogTitle>
                 <DialogContent>
-                    <Typography>Apakah Anda yakin ingin menghapus akun {selectedUser?.username}?</Typography>
+                    <Typography>Apakah Anda yakin ingin menghapus Jadwal {selectedJadwal?.peserta}?</Typography>
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={() => setOpenDelete(false)} sx={{ backgroundColor: '#0DBD2E', color: '#FFFFFF', borderRadius: '4px'}}>Batal</Button>
                     <Button onClick={handleDeleteConfirm} sx={{ backgroundColor: '#FE651F', color: '#FFFFFF', borderRadius: '4px'  }} >Hapus</Button>
                 </DialogActions>
             </Dialog>
+            <Dialog open={openTambah} onClose={() => setOpenTambah(false)} sx={{ '& .MuiDialog-paper': { backgroundColor: '#003366', borderRadius: '8px', color: 'white', width: '100%' } }}>
+                <DialogTitle>Tambah Jadwal</DialogTitle>
+                <DialogContent>
+                    <InputLabel sx={{ color: 'white'}}>Peserta</InputLabel>
+                    <TextField
+                        margin="dense"
+                        type="text"
+                        fullWidth
+                        name="peserta"
+                        value={newJadwal.peserta}
+                        onChange={handleChangeTambah}
+                        sx={{ backgroundColor: '#FFFFFF', borderRadius: '4px' }}
+                    />
+                    <InputLabel sx={{ color:'white' }} >Hari/Tanggal</InputLabel>
+                    <TextField 
+                        margin="dense"
+                        type="date"
+                        fullWidth
+                        name="haritanggal"
+                        value={newJadwal.haritanggal}
+                        onChange={handleChangeTambah}
+                        sx={{ backgroundColor: '#FFFFFF', borderRadius: '4px' }}
+                    />
+                    <InputLabel sx={{ color:'white' }} >Tempat</InputLabel>
+                    <TextField 
+                        margin="dense"
+                        type="text"
+                        fullWidth
+                        name="tempat"
+                        value={newJadwal.tempat}
+                        onChange={handleChangeTambah}
+                        sx={{ backgroundColor: '#FFFFFF', borderRadius: '4px' }}
+                    />
+                    <InputLabel sx={{ color:'white' }} >Waktu</InputLabel>
+                    <TextField 
+                        margin="dense"
+                        type="text"
+                        fullWidth
+                        name="waktu"
+                        value={newJadwal.waktu}
+                        onChange={handleChangeTambah}
+                        sx={{ backgroundColor: '#FFFFFF', borderRadius: '4px' }}
+                    />
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={() => setOpenTambah(false)} sx={{ backgroundColor: '#0DBD2E', color: '#FFFFFF', borderRadius: '4px'}}>Batal</Button>
+                    <Button onClick={handleDeleteConfirm} sx={{ backgroundColor: '#FE651F', color: '#FFFFFF', borderRadius: '4px'  }} >Tambah</Button>
+                </DialogActions>
+            </Dialog>
         </Box>
     );
 }
 
-export default DataPengguna;
+export default JadwalPresentasi;
