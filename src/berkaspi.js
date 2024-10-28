@@ -222,7 +222,7 @@ function BerkasPI() {
                 <Grid container justifyContent="center">
                     <Grid item xs={12} md={10}>
                      <Paper sx={{ padding: 1, backgroundColor: '#FFFFFF' }}>
-                        <Typography variant="h5" sx={{ marginBottom: 2, textAlign: 'center' }}>
+                        <Typography variant="h3" gutterBottom sx={{ fontWeight: 'bold', color: '#1E376D', textAlign: 'center', marginBottom: 4 }}>
                             Produk Inovatif
                         </Typography>
                         <Button 

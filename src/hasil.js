@@ -205,7 +205,7 @@ function Hasil() {
                 <Grid container justifyContent="center">
                     <Grid item xs={12} md={10}>
                      <Paper sx={{ padding: 1, backgroundColor: '#FFFFFF', width: '100%', minHeight: '450px', minWidth:'500px' }}>
-                        <Typography variant="h5" sx={{ marginBottom: 2, textAlign: 'center', color: '#1E376D', fontFamily: 'Calistoga, sans-serif' }}>
+                        <Typography variant="h3" gutterBottom sx={{ fontWeight: 'bold', color: '#1E376D', textAlign: 'center', marginBottom: 4 }}>
                             Hasil Seleksi
                         </Typography>
                         <IconButton
