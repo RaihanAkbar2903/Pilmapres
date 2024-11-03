@@ -19,9 +19,15 @@ import { useNavigate } from 'react-router-dom';
 function DataPengguna() {
     const [openLaman, setOpenLaman] = useState(false);
     const [openEdit, setOpenEdit] = useState(false); 
-    const [openDelete, setOpenDelete] = useState(false);  
+    const [openDelete, setOpenDelete] = useState(false);
+    const [openAdd, setOpenAdd] = useState(false);
     const [selectedUser, setSelectedUser] = useState(null); 
     const [editedUser, setEditedUser] = useState({
+        username: '',
+        password: '',
+        role: '',
+    });
+    const [newUser, setNewUser] = useState({
         username: '',
         password: '',
         role: '',
@@ -56,6 +62,19 @@ function DataPengguna() {
             ...prevState,
             [name]: value,
         }));
+    };
+
+    const handleNewUserChange = (e) => {
+        const { name, value } = e.target;
+        setNewUser((prevState) => ({
+            ...prevState,
+            [name]: value,
+        }));
+    };
+
+    const handleAddUser = () => {
+        console.log("Pengguna baru:", newUser);
+        setOpenAdd(false);
     };
 
     const handleToggleLaman = () => {
@@ -266,7 +285,8 @@ function DataPengguna() {
                             </Typography>
                             <Button 
                                 variant="contained" 
-                                color="primary" 
+                                color="primary"
+                                onClick={() => setOpenAdd(true)}
                                 sx={{ marginBottom: 2, backgroundColor: '#003366', minWidth: '20vh' }}
                                 >
                                 Tambah
@@ -306,6 +326,48 @@ function DataPengguna() {
                     </Grid>
                 </Grid>
             </Box>
+            <Dialog open={openAdd} onClose={() => setOpenAdd(false)}  sx={{ '& .MuiDialog-paper': { backgroundColor: '#003366', borderRadius: '8px', color: 'white', width: '100%' } }}>
+                <DialogTitle>Tambah Pengguna</DialogTitle>
+                <DialogContent>
+                    <InputLabel sx={{ color: 'white' }}>Username</InputLabel>
+                    <TextField
+                        margin="dense"
+                        type="text"
+                        fullWidth
+                        name="username"
+                        value={newUser.username}
+                        onChange={handleNewUserChange}
+                        sx={{ backgroundColor: '#FFFFFF', borderRadius: '4px' }}
+                    />
+                    <InputLabel sx={{ color: 'white' }}>Password</InputLabel>
+                    <TextField
+                        margin="dense"
+                        type="password"
+                        fullWidth
+                        name="password"
+                        value={newUser.password}
+                        onChange={handleNewUserChange}
+                        sx={{ backgroundColor: '#FFFFFF', borderRadius: '4px' }}
+                    />
+                    <InputLabel sx={{ color: 'white' }}>Role</InputLabel>
+                    <FormControl fullWidth margin="dense">
+                        <Select
+                            name="role"
+                            value={newUser.role}
+                            onChange={handleNewUserChange}
+                            sx={{ backgroundColor: '#FFFFFF', borderRadius: '4px' }}
+                        >
+                            <MenuItem value="Peserta">Peserta</MenuItem>
+                            <MenuItem value="Juri">Juri</MenuItem>
+                            <MenuItem value="Admin">Admin</MenuItem>
+                        </Select>
+                    </FormControl>
+                    <DialogActions>
+                        <Button onClick={() => setOpenAdd(false)} sx={{ backgroundColor: '#FE651F', color: '#FFFFFF', borderRadius: '4px' }}>Batal</Button>
+                        <Button onClick={handleAddUser} sx={{ backgroundColor: '#0DBD2E', color: '#FFFFFF', borderRadius: '4px' }}>Simpan</Button>
+                    </DialogActions>
+                </DialogContent>
+            </Dialog>
             <Dialog open={openEdit} onClose={() => setOpenEdit(false)} sx={{ '& .MuiDialog-paper': { backgroundColor: '#003366', borderRadius: '8px', color: 'white', width: '100%' } }} >
                 <DialogTitle>
                     Edit Pengguna
@@ -349,7 +411,7 @@ function DataPengguna() {
                     <Button onClick={handleSaveEdit} sx={{ backgroundColor: '#0DBD2E', color: '#FFFFFF', borderRadius: '4px'}} >Simpan</Button>
                 </DialogActions>
             </Dialog>
-            <Dialog open={openDelete} onClose={() => setOpenDelete(false)}>
+            <Dialog open={openDelete} onClose={() => setOpenDelete(false)} sx={{ '& .MuiDialog-paper': { backgroundColor: '#003366', borderRadius: '8px', color: 'white', width: '100%' } }}>
                 <DialogTitle>Konfirmasi Hapus</DialogTitle>
                 <DialogContent>
                     <Typography>Apakah Anda yakin ingin menghapus akun {selectedUser?.username}?</Typography>

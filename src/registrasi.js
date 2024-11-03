@@ -17,7 +17,7 @@ const StyledPaper = styled(Paper)(({ theme }) => ({
 }));
 
 function Registrasi() {
-  // State untuk mengelola input form dan error
+
   const [formData, setFormData] = useState({
     namaLengkap: '',
     nim: '',
