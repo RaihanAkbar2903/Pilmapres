@@ -11,14 +11,15 @@ import EventIcon from '@mui/icons-material/Event';
 import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import Logo from './assets/images/logopilmapres.png';
+import Banner from './assets/images/bannnerpilmapres.jpeg';
 import { useNavigate } from 'react-router-dom';
 
-function BerkasAdminCU() {
+function Banner() {
     const [openLaman, setOpenLaman] = useState(false);
     const [anchorEl, setAnchorEl] = useState(null);
     const [openDialog, setOpenDialog] =useState(false);
+    const [newBanner, setNewBanner] = useState(null);
     const navigate = useNavigate();
 
     const handleToggleLaman = () => {
@@ -45,14 +46,14 @@ function BerkasAdminCU() {
         setOpenDialog(false);
     };
 
-    const berkasData = [
-        { namaPeserta: 'Ali', nama: 'Olimpiade Nasional', kategori: 'Akademik', wujudCapaian: 'Juara', bidang: 'Matematika', status: 'Disetujui' },
-        { namaPeserta: 'Budi', nama: 'Olimpiade Matematika', kategori: 'Akademik', wujudCapaian: 'Peserta', bidang: 'Matematika', status: 'Menunggu' },
-        { namaPeserta: 'Citra', nama: 'Pencak Silat Provinsi', kategori: 'Non-Akademik', wujudCapaian: 'Juara', bidang: 'Olahraga', status: 'Ditolak' },
-        { namaPeserta: 'Dewi', nama: 'Gelang Bambu Muda', kategori: 'Non-Akademik', wujudCapaian: 'Juara', bidang: 'Kesenian', status: 'Disetujui' },
-        { namaPeserta: 'Eka', nama: 'Busana Batik Kreasi', kategori: 'Non-Akademik', wujudCapaian: 'Peserta', bidang: 'Desain', status: 'Menunggu' },
-        { namaPeserta: 'Fajar', nama: 'Risol Mayo Rebus', kategori: 'Non-Akademik', wujudCapaian: 'Peserta', bidang: 'Kuliner', status: 'Ditolak' },
-    ];
+    const handleBannerChange = (event) => {
+        setNewBanner(event.target.files[0]);
+    };
+
+    const handleBannerSave = () => {
+        console.log('Banner baru:', newBanner);
+        handleCloseDialog();
+    }
 
     return (
         <Box sx={{ display: 'flex'}}>
@@ -211,7 +212,7 @@ function BerkasAdminCU() {
             <Box sx={{ flexGrow: 1}}>
                 <Paper elevation={1} sx={{ padding: 2, marginBottom: 3, backgroundColor: '#003366', borderRadius: 0 }}>
                     <Typography variant="h4" sx={{ color: '#FFFFFF' }}>
-                        Data Berkas
+                        Kelola Banner
                     </Typography>
                     <IconButton
                             color="inherit"
@@ -233,66 +234,8 @@ function BerkasAdminCU() {
                     <Grid item xs={12}>
                         <Paper sx={{ padding: 1, backgroundColor: '#FFFFFF' }}>
                             <Typography variant="h3" gutterBottom sx={{ fontWeight: 'bold', color: '#1E376D', textAlign: 'center', marginBottom: 4 }}>
-                                Berkas Capaian Unggulan
+                                Banner
                             </Typography>
-                            <TableContainer component={Paper}>
-                                <Table>
-                                    <TableHead>
-                                        <TableRow sx={{ backgroundColor: '#003366'}}>
-                                            <TableCell sx={{ color: '#FFFFFF', fontWeight: 'bold' }}>No</TableCell>
-                                            <TableCell sx={{ color: '#FFFFFF', fontWeight: 'bold' }}>Nama Peserta</TableCell>
-                                            <TableCell sx={{ color: '#FFFFFF', fontWeight: 'bold' }}>Nama Berkas</TableCell>
-                                            <TableCell sx={{ color: '#FFFFFF', fontWeight: 'bold' }}>Kategori</TableCell>
-                                            <TableCell sx={{ color: '#FFFFFF', fontWeight: 'bold' }}>Wujud Capaian</TableCell>
-                                            <TableCell sx={{ color: '#FFFFFF', fontWeight: 'bold' }}>Bidang</TableCell>
-                                            <TableCell sx={{ color: '#FFFFFF', fontWeight: 'bold' }}>Status</TableCell>
-                                            <TableCell sx={{ color: '#FFFFFF', fontWeight: 'bold' }}>Aksi</TableCell>
-                                        </TableRow>
-                                    </TableHead>
-                                    <TableBody>
-                                        {berkasData.map((berkas, index)=> (
-                                            <TableRow key={index} sx={{ backgroundColor: index % 2 === 0 ? '#E8F0FE' : '#ffffff'}}>
-                                                <TableCell>{index + 1}</TableCell>
-                                                <TableCell>{berkas.namaPeserta}</TableCell>
-                                                <TableCell>{berkas.nama}</TableCell>
-                                                <TableCell>{berkas.kategori}</TableCell>
-                                                <TableCell>{berkas.wujudCapaian}</TableCell>
-                                                <TableCell>{berkas.bidang}</TableCell>
-                                                <TableCell>
-                                                    {berkas.status === 'Disetujui' && (
-                                                        <Typography sx={{ color: 'green' }}>{berkas.status}</Typography>
-                                                    )}
-                                                    {berkas.status === 'Menunggu' && (
-                                                        <Typography sx={{ color: 'orange' }}>{berkas.status}</Typography>
-                                                    )}
-                                                    {berkas.status === 'Ditolak' && (
-                                                        <Typography sx={{ color: 'red' }}>{berkas.status}</Typography>
-                                                    )}
-                                                </TableCell>
-                                                <TableCell>
-                                                    <IconButton>
-                                                        <InfoIcon sx={{ color: '#003366' }} />
-                                                    </IconButton>
-                                                    <IconButton onClick={handleOpenDialog}>
-                                                        <CheckCircleIcon sx={{ color: 'green' }} />
-                                                    </IconButton>
-                                                </TableCell>
-                                            </TableRow>
-                                        ))}
-                                    </TableBody>
-                                </Table>
-                            </TableContainer>
-                            <Dialog open={openDialog} onClose={handleCloseDialog}  sx={{ '& .MuiDialog-paper': { backgroundColor: '#003366', borderRadius: '8px', color: 'white', width: '100%' } }}>
-                                <DialogTitle>Verifikasi Capaian</DialogTitle>
-                                <DialogContent>
-                                    <Typography>Apakah anda yakin ingin menyetujui capaian unggulan ini ?</Typography>
-                                </DialogContent>
-                                <DialogActions>
-                                    <Button onClick={() => {handleCloseDialog(); }} sx={{ backgroundColor: '#0DBD2E', color: '#FFFFFF', borderRadius: '4px'  }}>Setuju</Button>
-                                    <Button onClick={() => {handleCloseDialog(); }}  sx={{ backgroundColor: '#FE651F', color: '#FFFFFF', borderRadius: '4px'  }}>Tolak</Button>
-                                    <Button onClick={handleCloseDialog} sx={{ backgroundColor: 'gray', color: '#FFFFFF', borderRadius: '4px'  }}>Batal</Button>
-                                </DialogActions>
-                            </Dialog>
                         </Paper>
                     </Grid>
                 </Grid>
@@ -301,4 +244,4 @@ function BerkasAdminCU() {
     );
 }
 
-export default BerkasAdminCU;
+export default Banner;
