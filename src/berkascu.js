@@ -29,6 +29,39 @@ function BerkasCU() {
         setOpenBerkas(!openBerkas);
     };
 
+    const wujudOptions = {
+        "Kompetisi": [
+            "Juara-1 Perorangan", "Juara-2 Perorangan", "Juara-3 Perorangan", 
+            "Juara Kategori Perorangan", "Juara-1 Beregu", "Juara-2 Beregu", 
+            "Juara-3 Beregu", "Juara Kategori Beregu"
+        ],
+        "Pengakuan": [
+            "Pelatih/Wasit/Juri berlisensi", "Pelatih/Wasit/Juri tidak berlisensi", 
+            "Nara sumber/pembicara", "Moderator", "Lainnya"
+        ],
+        "Penghargaan": [
+            "Tanda Jasa", "Penerima Hibah kompetisi (grand final, peraih medali emas berdasar nilai batas)", 
+            "Penerima Hibah kompetisi (grand final, peraih medali perak berdasar nilai batas)", 
+            "Penerima Hibah kompetisi (grand final, peraih medali perunggu berdasar nilai batas)", 
+            "Piagam Partisipasi", "Lainnya"
+        ],
+        "Karir Organisasi": [
+            "Ketua", "Wakil Ketua", "Sekretaris", "Bendahara", "Satu tingkat dibawah pengurus harian"
+        ],
+        "Hasil Karya": [
+            "Patent", "Patent Sederhana", "Hak Cipta", 
+            "Buku ber-ISBN penulis utama", "Buku ber-ISBN penulis kedua dst", 
+            "Penulis Utama/korespondensi karya ilmiah di journal yg bereputasi dan diakui", 
+            "Penulis kedua (bukan korespondensi) dst karya ilmiah di journal yg bereputasi dan diakui"
+        ],
+        "Pemberdayaan atau Aksi Kemanusiaan": [
+            "Pemrakarsa / Pendiri", "Koordinator Relawan", "Relawan"
+        ],
+        "Kewirausahaan": [
+            "Kewirausahaan"
+        ]
+    };
+
     const handleOpenDialog = () => {
         setOpenDialog(true);
     };
@@ -58,6 +91,7 @@ function BerkasCU() {
     };
     const handleBidangChange = (event) => {
         setBidang(event.target.value);
+        setWujud('');
     };
 
     const rows = [
@@ -297,12 +331,14 @@ function BerkasCU() {
                                     <Select
                                         value={kategori}
                                         onChange={handleKateogriChange}
-                                        label="Kategori"
                                         sx={{ backgroundColor: '#FFFFFF', borderRadius: '4px' }}
                                     >
 
-                                        <MenuItem value="Akademik">Akademik</MenuItem>
-                                        <MenuItem value="Non-Akademik">Non-Akademik</MenuItem>
+                                        <MenuItem value="Kategori A / Internasional">Kategori A / Internasional</MenuItem>
+                                        <MenuItem value="Kategori B / Regional">Kategori B / Regional</MenuItem>
+                                        <MenuItem value="Kategori C / Nasional">Kategori C / Nasional</MenuItem>
+                                        <MenuItem value="Kategori D / Provinsi">Kategori D / Provinsi</MenuItem>
+                                        <MenuItem value="Kategori E / Kab/Kota/ PT">Kategori E / Kab/Kota/ PT</MenuItem>
                                     </Select>
                               </FormControl>
                               <FormControl fullWidth>   
@@ -313,9 +349,13 @@ function BerkasCU() {
                                         label="Bidang"
                                         sx={{ backgroundColor: '#FFFFFF', borderRadius: '4px'}}
                                     >
-                                        <MenuItem value="Penilitian">Penilitian</MenuItem>
-                                        <MenuItem value="Organisasi">Organisasi</MenuItem>
-                                        <MenuItem value="Lomba">Lomba</MenuItem>
+                                        <MenuItem value="Kompetisi">Kompetisi</MenuItem>
+                                        <MenuItem value="Pengakuan">Pengakuan</MenuItem>
+                                        <MenuItem value="Penghargaan">Penghargaan</MenuItem>
+                                        <MenuItem value="Karir Organisasi">Karir Organisasi</MenuItem>
+                                        <MenuItem value="Hasil Karya">Hasil Karya</MenuItem>
+                                        <MenuItem value="Pemberdayaan atau Aksi Kemanusiaan">Pemberdayaan atau Aksi Kemanusiaan</MenuItem>
+                                        <MenuItem value="Kewirausahaan">Kewirausahaan</MenuItem>
                                     </Select>
                               </FormControl>
                               <FormControl fullWidth>
@@ -326,9 +366,11 @@ function BerkasCU() {
                                         label="Wujud Capaian"
                                         sx={{ backgroundColor: '#FFFFFF', borderRadius: '4px' }}
                                     >
-                                        <MenuItem value="Makalah">Makalah</MenuItem>
-                                        <MenuItem value="Piagam">Piagam</MenuItem>
-                                        <MenuItem value="Sertifikat">Sertifikat</MenuItem>
+                                        {wujudOptions[bidang]?.map((option, index) => (
+                                            <MenuItem key={index} value={option}>
+                                                {option}
+                                            </MenuItem>
+                                        ))}
                                     </Select>
                               </FormControl>
                                 <Button 

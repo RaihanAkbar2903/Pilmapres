@@ -255,7 +255,7 @@ function BerkasPI() {
                             </Table>
                         </TableContainer>
                         <Dialog open={openDialog} onClose={handleCloseDialog} 
-                            sx={{ '& .MuiDialog-paper': { backgroundColor: '#003366', borderRadius: '8px', color: 'white', width: '80 %' } }}>
+                            sx={{ '& .MuiDialog-paper': { backgroundColor: '#003366', borderRadius: '8px', color: 'white', width: '100%' } }}>
                             <DialogTitle>
                                 Unggah Berkas
                                 <IconButton 
