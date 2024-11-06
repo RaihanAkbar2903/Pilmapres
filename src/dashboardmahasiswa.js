@@ -201,19 +201,19 @@ function DashboardMahasiswa() {
                             <MenuItem onClick={handleLogout}>Logout</MenuItem>
                         </Menu>
                 </Paper>
-                <Grid container spacing={2} justifyContent="center" alignItems="center">
-                    <Grid item xs={12} sm={8}>
-                        <Paper elevation={3} sx={{ padding: 3, textAlign: 'center' }}>
-                            <Typography variant="h5" sx={{ marginBottom: 2 }}>
-                                Pemilihan Mahasiswa Berprestasi 
+                <Grid container spacing={1} justifyContent="center" alignItems="center">
+                    <Grid item xs={12} sm={12}>
+                        <Paper elevation={3} sx={{ padding: 2, textAlign: 'center', width: '100%' }}>
+                            <Typography variant="h3" sx={{ fontWeight: 'bold', color: '#1E376D', textAlign: 'center', marginBottom: 4, }}>
+                                Pemilihan Mahasiswa Berprestasi
                             </Typography>
-                            <Typography variant="h5" sx={{ marginBottom: 2 }}>
-                                Politeknik Negeri Batam 2024 
+                            <Typography variant="h3" sx={{ fontWeight: 'bold', color: '#1E376D', textAlign: 'center', marginBottom: 4, }}>
+                                Politeknik Negeri Batam
                             </Typography>
                             <img 
                                 alt="Banner Pilmapres" 
                                 src={Banner}
-                                style={{ width: '100%', height: 'auto' }} 
+                                style={{ width: '80%', height: 'auto' }} 
                             />
                         </Paper>
                     </Grid>

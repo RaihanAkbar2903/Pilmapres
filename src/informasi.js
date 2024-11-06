@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Box, Button, Typography, Grid, Paper, List, ListItem, ListItemIcon, ListItemText, Collapse, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, IconButton, DialogTitle, DialogContent, TextField, FormControl, InputLabel, Select, MenuItem, DialogActions, Dialog, Menu } from '@mui/material';
+import { Box, Button, Typography, Grid, Paper, List, ListItem, ListItemIcon, ListItemText, Collapse, TextField, IconButton, Menu, MenuItem, Toolbar, InputAdornment } from '@mui/material';
 import HomeIcon from '@mui/icons-material/Home';
 import DescriptionIcon from '@mui/icons-material/Description';
 import PeopleIcon from '@mui/icons-material/People'; 
@@ -12,14 +12,15 @@ import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import Logo from './assets/images/logopilmapres.png';
-import BannerImage from './assets/images/bannnerpilmapres.jpeg';
 import { useNavigate } from 'react-router-dom';
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
 
-function Banner() {
+function Informasi() {
     const [openLaman, setOpenLaman] = useState(false);
+    const [informasiText, setInformasiText] = useState(null);
     const [anchorEl, setAnchorEl] = useState(null);
-    const [openDialog, setOpenDialog] =useState(false);
-    const [newBanner, setNewBanner] = useState(null);
+    const [fontSize, setFontSize] = useState(16);
     const navigate = useNavigate();
 
     const handleToggleLaman = () => {
@@ -38,23 +39,16 @@ function Banner() {
         navigate('/login'); 
     };
 
-    const handleOpenDialog = () => {
-        setOpenDialog(true);
+    const handleSaveInformasi = () => {
+        console.log('Informasi disimpan:', informasiText);
     };
 
-    const handleCloseDialog = () => {
-        setOpenDialog(false);
+    const handleFontSizeChange = (e) => {
+        const value = parseInt(e.target.value, 10);
+        if (!isNaN(value)) {
+            setFontSize(value);
+        }
     };
-
-    const handleBannerChange = (event) => {
-        setNewBanner(event.target.files[0]);
-    };
-
-    const handleBannerSave = () => {
-        console.log('Banner baru:', newBanner);
-        handleCloseDialog();
-    }
-
     return (
         <Box sx={{ display: 'flex'}}>
             <Box sx={{ 
@@ -212,7 +206,7 @@ function Banner() {
             <Box sx={{ flexGrow: 1}}>
                 <Paper elevation={1} sx={{ padding: 2, marginBottom: 3, backgroundColor: '#003366', borderRadius: 0 }}>
                     <Typography variant="h4" sx={{ color: '#FFFFFF' }}>
-                        Kelola Banner
+                        Kelola Informasi
                     </Typography>
                     <IconButton
                             color="inherit"
@@ -231,32 +225,42 @@ function Banner() {
                 </Paper>
                 <Grid container spacing={3} justifyContent="flex-end" sx={{ padding: 3 }}>
                     <Grid item xs={12}>
-                        <Paper sx={{ padding: 1, backgroundColor: '#FFFFFF' }}>
+                        <Paper sx={{ padding: 1, backgroundColor: '#FFFFFF', display: 'flex', flexDirection: 'column', height: '100%', maxWidth: '100%'  }}>
                             <Typography variant="h3" gutterBottom sx={{ fontWeight: 'bold', color: '#1E376D', textAlign: 'center', marginBottom: 3 }}>
-                                Banner
+                                Informasi
                             </Typography>
-                            <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginTop: 2 }}>
-                                <img src={BannerImage} alt="Current Banner" style={{ width: '100%', maxWidth: '750px', borderRadius: '8px' }} />
-                                <Button variant="contained" onClick={handleOpenDialog} sx={{ marginTop: 4, alignSelf: 'flex-end', fontSize: '1rem', color: 'white', backgroundColor: '#003366' }}>
-                                    Edit Banner
+                            <ReactQuill
+                                value={informasiText}
+                                onChange={setInformasiText}
+                                theme="snow"
+                                style={{
+                                    minHeight: '200px',
+                                    flexGrow: 1,
+                                    fontSize: `${fontSize}px`,
+                                    fontFamily: 'Arial, sans-serif',
+                                    width: '100%',
+                                    maxWidth: '100%',
+                                    whiteSpace: 'pre-wrap',
+                                    wordBreak: 'break-word',
+                                    overflowWrap: 'break-word',
+                                }}
+                            />
+                            <Box sx={{ textAlign: 'right', marginTop: 10}}>
+                                <Button 
+                                    variant="contained" 
+                                    color="primary" 
+                                    onClick={handleSaveInformasi}
+                                    sx={{ backgroundColor: '#1E376D', color: '#FFFFFF', '&:hover': { backgroundColor: '#003366' } }}
+                                >
+                                    Simpan
                                 </Button>
                             </Box>
                         </Paper>
                     </Grid>
                 </Grid>
             </Box>
-            <Dialog open={openDialog} onClose={handleCloseDialog} sx={{ '& .MuiDialog-paper': { backgroundColor: '#003366', borderRadius: '8px', color: 'white', width: '100%' } }} >
-                <DialogTitle>Ganti Banner</DialogTitle>
-                <DialogContent>
-                    <input type="file" onChange={handleBannerChange} accept="image/*" />
-                </DialogContent>
-                <DialogActions>
-                    <Button onClick={handleCloseDialog} sx={{ backgroundColor: '#FE651F', color: '#FFFFFF', borderRadius: '4px' }} >Batal</Button>
-                    <Button onClick={handleBannerSave} color="primary" sx={{ backgroundColor: '#0DBD2E', color: '#FFFFFF', borderRadius: '4px' }} >Simpan</Button>
-                </DialogActions>
-            </Dialog>
         </Box>
     );
 }
 
-export default Banner;
+export default Informasi;

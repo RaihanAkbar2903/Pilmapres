@@ -13,6 +13,8 @@ import DataPengguna from './datapengguna';
 import BerkasAdminCU from './berkasadmincu';
 import JadwalPresentasi from './jadwalpresentasi';
 import Banner from './banner';
+import Informasi from './informasi';
+import JadwalPilmapres from './jadwalpilmapres';
 function App() {
   return (
       <Router>
@@ -30,6 +32,8 @@ function App() {
           <Route path="/berkasadmincu" element={<BerkasAdminCU />} ></Route>
           <Route path="/jadwalpresentasi" element={<JadwalPresentasi />} ></Route>
           <Route path="/banner" element={<Banner />} ></Route>
+          <Route path="/informasi" element={<Informasi />} ></Route>
+          <Route path="/jadwalpilmapres" element={<JadwalPilmapres />} ></Route>
         </Routes>
       </Router>
   );
