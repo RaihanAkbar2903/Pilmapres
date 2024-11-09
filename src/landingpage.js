@@ -47,7 +47,7 @@ function Landing() {
   return (
     <>
       {/* Navbar */}
-      <AppBar position="static" style={{ backgroundColor: '#F5F5F5', minHeight: '56px' }}>
+      <AppBar position="sticky" style={{ backgroundColor: '#F5F5F5', minHeight: '56px' }}>
         <Container maxWidth="lg">
           <Toolbar style={{ minHeight: '56px', padding: 0 }}>
             <img

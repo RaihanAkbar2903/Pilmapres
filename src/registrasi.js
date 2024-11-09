@@ -21,7 +21,6 @@ function Registrasi() {
   const [formData, setFormData] = useState({
     namaLengkap: '',
     nim: '',
-    username: '',
     password: '',
     tempat: '',
     tanggalLahir: '',
@@ -117,18 +116,6 @@ function Registrasi() {
                 onChange={handleChange}
                 error={!!errors.nim}
                 helperText={errors.nim}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                label="Username"
-                name="username"
-                fullWidth
-                variant="outlined"
-                value={formData.username}
-                onChange={handleChange}
-                error={!!errors.username}
-                helperText={errors.username}
               />
             </Grid>
             <Grid item xs={12}>

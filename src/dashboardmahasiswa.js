@@ -34,7 +34,6 @@ function DashboardMahasiswa() {
 
     return (
         <Box sx={{ display: 'flex', height: '100vh' }}>
-            {/* Sidebar */}
             <Box sx={{ 
                 width: '250px', 
                 backgroundColor: '#FFFFFF', 
