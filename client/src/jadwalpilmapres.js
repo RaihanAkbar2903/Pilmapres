@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Box, Button, Typography, Grid, Paper, List, ListItem, ListItemIcon, ListItemText, Collapse, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, IconButton, DialogTitle, DialogContent, TextField, FormControl, InputLabel, Select, MenuItem, DialogActions, Dialog, Menu } from '@mui/material';
+import { Box, Button, Typography, Grid, Paper, List, ListItem, ListItemIcon, ListItemText, Collapse, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, IconButton, DialogTitle, DialogContent, TextField, InputLabel, MenuItem, DialogActions, Dialog, Menu } from '@mui/material';
 import HomeIcon from '@mui/icons-material/Home';
 import DescriptionIcon from '@mui/icons-material/Description';
 import PeopleIcon from '@mui/icons-material/People'; 
@@ -102,9 +102,25 @@ function JadwalPilmapres() {
         setAnchorEl(null);
     }
 
-    const handleLogout = () => {
-        navigate('/login'); 
-    };
+        const handleLogout = async () => {
+        try {
+          // Panggil endpoint logout (opsional)
+          await fetch('http://localhost:5000/logout', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          });
+    
+          // Hapus token dari localStorage
+          localStorage.removeItem('token');
+    
+          // Redirect ke halaman login
+          navigate('/login');
+        } catch (err) {
+          console.error('Logout gagal:', err);
+        }
+      };
 
     return (
         <Box sx={{ display: 'flex'}}>
@@ -394,8 +410,8 @@ function JadwalPilmapres() {
                     />
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={() => setOpenTambah(false)} sx={{ backgroundColor: '#0DBD2E', color: '#FFFFFF', borderRadius: '4px'}}>Batal</Button>
-                    <Button onClick={handleDeleteConfirm} sx={{ backgroundColor: '#FE651F', color: '#FFFFFF', borderRadius: '4px'  }} >Tambah</Button>
+                    <Button onClick={() => setOpenTambah(false)} sx={{ backgroundColor: '#FE651F', color: '#FFFFFF', borderRadius: '4px'}}>Batal</Button>
+                    <Button onClick={handleSaveTambah} sx={{ backgroundColor: '#0DBD2E', color: '#FFFFFF', borderRadius: '4px'  }} >Tambah</Button>
                 </DialogActions>
             </Dialog>
         </Box>

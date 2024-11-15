@@ -15,25 +15,30 @@ import JadwalPresentasi from './jadwalpresentasi';
 import Banner from './banner';
 import Informasi from './informasi';
 import JadwalPilmapres from './jadwalpilmapres';
+import ProtectedRoute from './ProtectedRoute';
+
 function App() {
   return (
       <Router>
         <Routes>
           <Route path="/" element={<Landing />} ></Route>
           <Route path="/login" element={<Login />} ></Route>
-          <Route path="/dashboardmahasiswa" element={<DashboardMahasiswa />} ></Route>
-          <Route path="/berkascu" element={<BerkasCU />} ></Route>
-          <Route path="/berkaspi" element={<BerkasPI />} ></Route>
-          <Route path="/jadwal" element={<Jadwal />} ></Route>
-          <Route path="/hasil" element={<Hasil />} ></Route>
           <Route path="/registrasi" element={<Registrasi />} ></Route>
-          <Route path="/dashboardadmin" element={<DashboardAdmin />} ></Route>
-          <Route path="/datapengguna" element={<DataPengguna />} ></Route>
-          <Route path="/berkasadmincu" element={<BerkasAdminCU />} ></Route>
-          <Route path="/jadwalpresentasi" element={<JadwalPresentasi />} ></Route>
-          <Route path="/banner" element={<Banner />} ></Route>
-          <Route path="/informasi" element={<Informasi />} ></Route>
-          <Route path="/jadwalpilmapres" element={<JadwalPilmapres />} ></Route>
+          
+          <Route element={<ProtectedRoute />}>
+            <Route path="/dashboardmahasiswa" element={<DashboardMahasiswa />} ></Route>
+            <Route path="/berkascu" element={<BerkasCU />} ></Route>
+            <Route path="/berkaspi" element={<BerkasPI />} ></Route>
+            <Route path="/jadwal" element={<Jadwal />} ></Route>
+            <Route path="/hasil" element={<Hasil />} ></Route>
+            <Route path="/banner" element={<Banner />} ></Route>
+            <Route path="/informasi" element={<Informasi />} ></Route>
+            <Route path="/jadwalpilmapres" element={<JadwalPilmapres />} ></Route>
+            <Route path="/dashboardadmin" element={<DashboardAdmin />} ></Route>
+            <Route path="/datapengguna" element={<DataPengguna />} ></Route>
+            <Route path="/berkasadmincu" element={<BerkasAdminCU />} ></Route>
+            <Route path="/jadwalpresentasi" element={<JadwalPresentasi />} ></Route>
+          </Route>
         </Routes>
       </Router>
   );

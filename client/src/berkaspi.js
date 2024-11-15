@@ -42,9 +42,26 @@ function BerkasPI() {
         setAnchorEl(null);
     }
 
-    const handleLogout = () => {
-        navigate('/login');
-    };
+    const handleLogout = async () => {
+        try {
+          // Panggil endpoint logout (opsional)
+          await fetch('http://localhost:5000/logout', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          });
+    
+          // Hapus token dari localStorage
+          localStorage.removeItem('token');
+    
+          // Redirect ke halaman login
+          navigate('/login');
+        } catch (err) {
+          console.error('Logout gagal:', err);
+        }
+      };
+      
     const rows = [
         { no: 1, kategori: 'Akademik', bidang: 'Penelitian', wujud: 'Makalah', namaBerkas: 'Makalah Penelitian.pdf', status: 'Sudah Diunggah' },
         { no: 2, kategori: 'Non-Akademik', bidang: 'Organisasi', wujud: 'Piagam', namaBerkas: 'Piagam Organisasi.pdf', status: 'Belum Diunggah' },

@@ -40,8 +40,9 @@ function DataPengguna() {
     // Fetch data from backend
     const fetchData = async () => {
         try {
-            const response = await axios.get('http://localhost:5000/datapengguna');
-            setPengguna(response.data);
+            const response = await fetch('http://localhost:5000/datapengguna');
+            const data = await response.json();
+            setPengguna(data);
         } catch (error) {
             console.error("Error fetching data:", error);
         }
@@ -89,7 +90,7 @@ const handleAddUser = async () => {
     try {
         const response = await axios.post('http://localhost:5000/datapengguna', newUser);
         if (response.status === 201) {
-            fetchData(); 
+            await fetchData(); 
             setOpenAdd(false); 
             setNewUser({ username: '', password: '', role: ''});
         } else {
@@ -127,9 +128,25 @@ const handleAddUser = async () => {
         setAnchorEl(null);
     }
 
-    const handleLogout = () => {
-        navigate('/login'); 
-    };
+    const handleLogout = async () => {
+        try {
+          // Panggil endpoint logout (opsional)
+          await fetch('http://localhost:5000/logout', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          });
+    
+          // Hapus token dari localStorage
+          localStorage.removeItem('token');
+    
+          // Redirect ke halaman login
+          navigate('/login');
+        } catch (err) {
+          console.error('Logout gagal:', err);
+        }
+      };
 
     return (
         <Box sx={{ display: 'flex'}}>
@@ -332,7 +349,7 @@ const handleAddUser = async () => {
                                     </TableHead>
                                     <TableBody>
                                         {pengguna.map((row, index) => (
-                                            <TableRow key={row.id}  sx={{ backgroundColor: index % 2 === 0 ? '#E8F0FE' : '#ffffff'}}>
+                                            <TableRow key={row.id_pengguna}  sx={{ backgroundColor: index % 2 === 0 ? '#E8F0FE' : '#ffffff'}}>
                                                 <TableCell>{index + 1}</TableCell>
                                                 <TableCell>{row.username}</TableCell>
                                                 <TableCell>{row.role}</TableCell>
@@ -423,6 +440,7 @@ const handleAddUser = async () => {
                     <InputLabel sx={{ color:'white' }} >Role</InputLabel>
                     <FormControl fullWidth margin="dense">
                         <Select
+                            name='role'
                             value={editedUser.role}
                             onChange={handleChange}
                             sx={{ backgroundColor: '#FFFFFF', borderRadius: '4px' }}

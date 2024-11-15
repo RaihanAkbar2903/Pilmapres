@@ -7,16 +7,14 @@ import Banner from './assets/images/bannnerpilmapres.jpeg';
 function Landing() {
   const navigate = useNavigate();
 
-  // Referensi untuk scroll ke setiap section
   const informasiRef = useRef(null);
   const jadwalRef = useRef(null);
   const kontakRef = useRef(null);
 
-  // Fungsi untuk scroll ke bagian tertentu
   const scrollToSection = (ref) => {
     window.scrollTo({
-      top: ref.current.offsetTop - 50, // Mengurangi nilai untuk memastikan bagian terlihat jelas
-      behavior: 'smooth', // Membuat scroll smooth
+      top: ref.current.offsetTop - 50, 
+      behavior: 'smooth', 
     });
   };
 

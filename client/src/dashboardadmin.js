@@ -51,10 +51,25 @@ function DashboardAdmin() {
         setAnchorEl(null);
     }
 
-    const handleLogout = () => {
-        navigate('/login'); 
-    };
-
+    const handleLogout = async () => {
+        try {
+          // Panggil endpoint logout (opsional)
+          await fetch('http://localhost:5000/logout', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          });
+    
+          // Hapus token dari localStorage
+          localStorage.removeItem('token');
+    
+          // Redirect ke halaman login
+          navigate('/login');
+        } catch (err) {
+          console.error('Logout gagal:', err);
+        }
+      };
     return (
         <Box sx={{ display: 'flex'}}>
             <Box sx={{ 

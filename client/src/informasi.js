@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Box, Button, Typography, Grid, Paper, List, ListItem, ListItemIcon, ListItemText, Collapse, TextField, IconButton, Menu, MenuItem, Toolbar, InputAdornment } from '@mui/material';
+import { Box, Button, Typography, Grid, Paper, List, ListItem, ListItemIcon, ListItemText, Collapse, IconButton, Menu, MenuItem } from '@mui/material';
 import HomeIcon from '@mui/icons-material/Home';
 import DescriptionIcon from '@mui/icons-material/Description';
 import PeopleIcon from '@mui/icons-material/People'; 
@@ -20,7 +20,7 @@ function Informasi() {
     const [openLaman, setOpenLaman] = useState(false);
     const [informasiText, setInformasiText] = useState(null);
     const [anchorEl, setAnchorEl] = useState(null);
-    const [fontSize, setFontSize] = useState(16);
+    const [fontSize] = useState(16);
     const navigate = useNavigate();
 
     const handleToggleLaman = () => {
@@ -35,19 +35,28 @@ function Informasi() {
         setAnchorEl(null);
     }
 
-    const handleLogout = () => {
-        navigate('/login'); 
-    };
+    const handleLogout = async () => {
+        try {
+          // Panggil endpoint logout (opsional)
+          await fetch('http://localhost:5000/logout', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          });
+    
+          // Hapus token dari localStorage
+          localStorage.removeItem('token');
+    
+          // Redirect ke halaman login
+          navigate('/login');
+        } catch (err) {
+          console.error('Logout gagal:', err);
+        }
+      };
 
     const handleSaveInformasi = () => {
         console.log('Informasi disimpan:', informasiText);
-    };
-
-    const handleFontSizeChange = (e) => {
-        const value = parseInt(e.target.value, 10);
-        if (!isNaN(value)) {
-            setFontSize(value);
-        }
     };
     return (
         <Box sx={{ display: 'flex'}}>
