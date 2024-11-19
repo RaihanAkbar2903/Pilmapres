@@ -15,7 +15,7 @@ const StyledPaper = styled(Paper)(({ theme }) => ({
 }));
 
 function Login() {
-  const [credential, setCredential] = useState(''); // Credential bisa NIM atau username
+  const [credential, setCredential] = useState(''); 
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const navigate = useNavigate();
@@ -40,15 +40,12 @@ function Login() {
       const data = await response.json();
 
       if (response.ok) {
-        // Simpan token JWT di local storage
         localStorage.setItem('token', data.token);
 
-        // Decode token JWT untuk mendapatkan role
         const token = data.token;
         const decodedToken = JSON.parse(atob(token.split('.')[1]));
         const role = decodedToken.role;
 
-        // Arahkan pengguna ke dashboard sesuai role
         if (role.toLowerCase() === 'mahasiswa') {
           navigate('/dashboardmahasiswa');
         } else if (role.toLowerCase() === 'admin') {
@@ -81,7 +78,6 @@ function Login() {
         <StyledPaper>
           <img src={Logo} alt="Logo Pilmapres" style={{ width: '150px', marginBottom: '20px' }} />
           <Box component="form" onSubmit={handleSubmit} sx={{ mt: 1 }}>
-            {/* Input Field untuk NIM atau Username */}
             <TextField
               label="NIM atau Username"
               variant="outlined"
@@ -92,7 +88,6 @@ function Login() {
               error={!!error && !credential}
               helperText={!credential && error ? 'NIM atau Username harus diisi' : ''}
             />
-
             <TextField
               label="Password"
               type="password"
@@ -104,9 +99,7 @@ function Login() {
               error={!!error && !password}
               helperText={!password && error ? 'Password harus diisi' : ''}
             />
-
             {error && <Typography color="error">{error}</Typography>}
-
             <Button
               variant="contained"
               fullWidth

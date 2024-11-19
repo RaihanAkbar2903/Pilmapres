@@ -92,7 +92,7 @@ const handleAddUser = async () => {
         if (response.status === 201) {
             await fetchData(); 
             setOpenAdd(false); 
-            setNewUser({ username: '', password: '', role: ''});
+            setNewUser({ username: '', password: '', role: '',});
         } else {
             console.error("Failed to add user, server returned:", response.status);
         }
@@ -444,6 +444,7 @@ const handleAddUser = async () => {
                             value={editedUser.role}
                             onChange={handleChange}
                             sx={{ backgroundColor: '#FFFFFF', borderRadius: '4px' }}
+                            disabled
                         >
                             <MenuItem value="Mahasiswa"> Mahasiswa </MenuItem>
                             <MenuItem value="Juri"> Juri </MenuItem>

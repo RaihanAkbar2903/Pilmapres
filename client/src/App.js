@@ -16,6 +16,7 @@ import Banner from './banner';
 import Informasi from './informasi';
 import JadwalPilmapres from './jadwalpilmapres';
 import ProtectedRoute from './ProtectedRoute';
+import DashboardJuri from './dashboardjuri';
 
 function App() {
   return (
@@ -38,6 +39,7 @@ function App() {
             <Route path="/datapengguna" element={<DataPengguna />} ></Route>
             <Route path="/berkasadmincu" element={<BerkasAdminCU />} ></Route>
             <Route path="/jadwalpresentasi" element={<JadwalPresentasi />} ></Route>
+            <Route path="/dashboardjuri" element={<DashboardJuri />} ></Route>
           </Route>
         </Routes>
       </Router>
