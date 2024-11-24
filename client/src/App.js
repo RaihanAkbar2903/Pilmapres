@@ -17,6 +17,9 @@ import Informasi from './informasi';
 import JadwalPilmapres from './jadwalpilmapres';
 import ProtectedRoute from './ProtectedRoute';
 import DashboardJuri from './dashboardjuri';
+import Peserta from './peserta';
+import BerkasJuri from './berkasjuri';
+import PresentasiJuri from './presentasijuri';
 
 function App() {
   return (
@@ -40,6 +43,9 @@ function App() {
             <Route path="/berkasadmincu" element={<BerkasAdminCU />} ></Route>
             <Route path="/jadwalpresentasi" element={<JadwalPresentasi />} ></Route>
             <Route path="/dashboardjuri" element={<DashboardJuri />} ></Route>
+            <Route path="/peserta" element={<Peserta />} ></Route>
+            <Route path="/berkasjuri" element={<BerkasJuri />} ></Route>
+            <Route path="/presentasijuri" element={<PresentasiJuri />} ></Route>
           </Route>
         </Routes>
       </Router>

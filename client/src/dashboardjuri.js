@@ -61,7 +61,7 @@ function DashboardJuri() {
                         <ListItem sx={{ marginBottom: '10px', }}>
                             <Button 
                                 fullWidth
-                                onClick={() => navigate('/dashboardadmin')} 
+                                onClick={() => navigate('/dashboardjuri')} 
                                 sx={{ 
                                     color: '#1E376D', 
                                     '&:hover': { 

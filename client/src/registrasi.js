@@ -56,6 +56,7 @@ function Registrasi() {
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
+    username: '',
     namaLengkap: '',
     nim: '',
     password: '',
@@ -121,6 +122,7 @@ function Registrasi() {
                 navigate('/login');
             } else {
                 alert(result.error);
+                console.error('Error:', result.error);  // <-- Debug error line
             }
         } catch (error) {
             console.error('Error:', error);  // <-- Debug error line
@@ -179,6 +181,18 @@ function Registrasi() {
                 onChange={handleChange}
                 error={!!errors.nim}
                 helperText={errors.nim}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                label="Username"
+                name="username"
+                fullWidth
+                variant="outlined"
+                value={formData.username}
+                onChange={handleChange}
+                error={!!errors.username}
+                helperText={errors.username}
               />
             </Grid>
             <Grid item xs={12}>

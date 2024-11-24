@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Box, Button, Typography, Grid, Paper, List, ListItem, ListItemIcon, ListItemText, Collapse, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, IconButton, DialogTitle, DialogContent, TextField, InputLabel, MenuItem, DialogActions, Dialog, Menu } from '@mui/material';
 import HomeIcon from '@mui/icons-material/Home';
 import DescriptionIcon from '@mui/icons-material/Description';
@@ -35,6 +35,7 @@ function JadwalPresentasi() {
         tempat: '',
         waktu: '',
     });
+    const [jadwal, setJadwal] = useState([]);
     const [anchorEl, setAnchorEl] = useState(null);
     const navigate = useNavigate();
 
@@ -48,9 +49,43 @@ function JadwalPresentasi() {
          setOpenTambah(true);
     }
 
-    const handleSaveTambah = () => {
-        console.log("Data Jadwal Baru: ", newJadwal);
-        setOpenTambah(false);
+    useEffect(() => {
+        const fetchJadwal = async () => {
+            try {
+                const response = await fetch('/api/jadwal');
+                if (response.ok) {
+                    const data = await response.json();
+                    setJadwal(data);  // Assuming response data is in JSON format
+                } else {
+                    console.error('Failed to fetch jadwal, status:', response.status);
+                }
+            } catch (error) {
+                console.error('There was an error fetching the jadwal!', error);
+            }
+        };
+
+        fetchJadwal();  // Call the async function
+    }, []);
+
+
+    const handleSaveTambah = async () => {
+        try {
+            // Assuming you want to make an API call or handle async operations here
+            const response = await fetch('/api/jadwal', {
+                method: 'POST',
+                body: JSON.stringify(newJadwal),
+                headers: { 'Content-Type': 'application/json' }
+            });
+    
+            if (response.ok) {
+                console.log("Jadwal Baru berhasil ditambahkan");
+                setOpenTambah(false);
+            } else {
+                console.log("Error saat menambah jadwal");
+            }
+        } catch (error) {
+            console.error("Terjadi kesalahan:", error);
+        }
     };
 
     const handleChangeTambah = (e) => {
@@ -72,16 +107,40 @@ function JadwalPresentasi() {
         setOpenDelete(true); 
     };
 
-    const handleSaveEdit = () => {
-        console.log("Data jadwal yang diubah:", editedJadwal);
-        setOpenEdit(false);
+    const handleSaveEdit = async () => {
+        try {
+            const response = await fetch(`/api/jadwal/${selectedJadwal.no}`, {
+                method: 'PUT',
+                body: JSON.stringify(editedJadwal),
+                headers: { 'Content-Type': 'application/json' }
+            });
+    
+            if (response.ok) {
+                console.log("Jadwal berhasil diperbarui");
+                setOpenEdit(false);
+            } else {
+                console.log("Error saat mengupdate jadwal");
+            }
+        } catch (error) {
+            console.error("Terjadi kesalahan:", error);
+        }
     };
-
-    const handleDeleteConfirm = () => {
-        console.log("Data jadwal yang dihapus:", selectedJadwal);
-        setOpenDelete(false);
+    const handleDeleteConfirm = async () => {
+        try {
+            const response = await fetch(`/api/jadwal/${selectedJadwal.no}`, {
+                method: 'DELETE'
+            });
+    
+            if (response.ok) {
+                console.log("Jadwal berhasil dihapus");
+                setOpenDelete(false);
+            } else {
+                console.log("Error saat menghapus jadwal");
+            }
+        } catch (error) {
+            console.error("Terjadi kesalahan:", error);
+        }
     };
-
     const handleChange = (e) => {
         const { name, value } = e.target;
         setEditedJadwal((prevState) => ({
@@ -94,11 +153,6 @@ function JadwalPresentasi() {
         setOpenLaman(!openLaman);
     };
 
-    const jadwal = [
-        { no: '1', peserta: 'Sesa Febrius Trialaka', haritanggal: '2024-10-01', tempat: 'Ruang A', waktu: '10:00' },
-        { no: '2', peserta: 'Satria Bintang Putra', haritanggal: '2024-10-02', tempat: 'Ruang B', waktu: '13:00' },
-        { no: '3', peserta: 'Maudy Rahayu', haritanggal: '2024-10-03', tempat: 'Ruang C', waktu: '15:00' }
-    ];
 
     const handleAccountClick = (event) => {
         setAnchorEl(event.currentTarget);

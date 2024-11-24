@@ -42,10 +42,8 @@ function Login() {
       if (response.ok) {
         localStorage.setItem('token', data.token);
 
-        const token = data.token;
-        const decodedToken = JSON.parse(atob(token.split('.')[1]));
-        const role = decodedToken.role;
-
+        const role = data.role;
+        
         if (role.toLowerCase() === 'mahasiswa') {
           navigate('/dashboardmahasiswa');
         } else if (role.toLowerCase() === 'admin') {
@@ -57,7 +55,7 @@ function Login() {
         setError(data.error || 'Terjadi kesalahan saat login');
       }
     } catch (err) {
-      setError('Gagal menghubungi server');
+      setError('Gagal menghubungi server', err);
     }
   };
 

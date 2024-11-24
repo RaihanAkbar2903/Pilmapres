@@ -20,10 +20,14 @@ router.post('/', async (req, res) => {
             if (err) {
                 return res.status(500).json({ error: 'Gagal memproses login.' });
             }
-
+            
             if (results.length > 0) {
+                
                 const user = results[0];
-                const isMatch = await bcrypt.compare(password, user.password);
+                const [dataFromDb] = await db.promise().query('SELECT * FROM pengguna WHERE id_pengguna = ?', [user.id_pengguna]);
+                // console.log(dataFromDb[0]);
+                
+                const isMatch = await bcrypt.compare(password, dataFromDb[0].password);
 
                 if (!isMatch) {
                     return res.status(401).json({ error: 'Password salah.' });
@@ -31,11 +35,11 @@ router.post('/', async (req, res) => {
 
                 // Membuat token JWT untuk Mahasiswa
                 const token = jwt.sign(
-                    { id: user.id, nim: user.nim, namaLengkap: user.namaLengkap, role: 'mahasiswa' },
+                    { id_pengguna: user.id_pengguna, id_pendaftaran: user.id ,nim: user.nim, namaLengkap: user.namaLengkap, role: dataFromDb[0].role },
                     JWT_SECRET,
-                    { expiresIn: '1h' }
+                    { expiresIn: '3h' }
                 );
-                return res.json({ message: 'Login berhasil', token });
+                return res.json({ message: 'Login berhasil d', token , role: dataFromDb[0].role});
             }
 
             // Jika tidak ditemukan di tabel pendaftaran, coba login sebagai Admin/Juri di tabel pengguna
@@ -50,6 +54,11 @@ router.post('/', async (req, res) => {
                 }
 
                 const user = results[0];
+
+                if (user.role.toLowerCase() !== 'admin' && user.role.toLowerCase() !== 'juri') {
+                    return res.status(401).json({ error: 'NIM atau Username tidak ditemukan.' });
+                }
+                
                 const isMatch = await bcrypt.compare(password, user.password);
 
                 if (!isMatch) {
@@ -60,9 +69,9 @@ router.post('/', async (req, res) => {
                 const token = jwt.sign(
                     { id: user.id, username: user.username, role: user.role },
                     JWT_SECRET,
-                    { expiresIn: '1h' }
+                    { expiresIn: '3h' }
                 );
-                return res.json({ message: 'Login berhasil', token });
+                return res.json({ message: 'Login berhasil', token, role: user.role });
             });
         });
     } catch (error) {
