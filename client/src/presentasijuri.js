@@ -11,7 +11,7 @@ import { useNavigate } from 'react-router-dom';
 
 function PresentasiJuri() {
     const [openDialog, setOpenDialog] = useState(false);
-    const [selectedPeserta, setSelectedPeserta] = useState(null);
+    const [setSelectedPeserta] = useState(null);
     const [anchorEl, setAnchorEl] = useState(null);
     const navigate = useNavigate(); 
 

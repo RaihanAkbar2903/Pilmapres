@@ -113,7 +113,7 @@ function BerkasAdminCU() {
 
   const handleLogout = async () => {
     try {
-      // Panggil endpoint logout (opsional)
+      
       await fetch("http://localhost:5000/logout", {
         method: "POST",
         headers: {
@@ -121,10 +121,10 @@ function BerkasAdminCU() {
         },
       });
 
-      // Hapus token dari localStorage
+  
       localStorage.removeItem("token");
 
-      // Redirect ke halaman login
+      
       navigate("/login");
     } catch (err) {
       console.error("Logout gagal:", err);
@@ -454,7 +454,7 @@ function BerkasAdminCU() {
               <TableContainer component={Paper}>
                 <TextField
                   id="search"
-                  label="Cari berkas berdasarkan nama peserta"
+                  label="Cari nama peserta"
                   variant="outlined"
                   margin="normal"
                   onChange={(e) => {

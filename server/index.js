@@ -10,6 +10,7 @@ const loginRouter = require("./routes/login");
 const logoutRouter = require("./routes/logout");
 const capaian = require("./routes/capaian");
 const migratePendaftaranRouter = require("./routes/migratePendaftaran");
+const inovatif = require("./routes/inovatif");
 
 const app = express();
 const PORT = 5000;
@@ -26,6 +27,7 @@ app.use("/login", loginRouter);
 app.use("/logout", logoutRouter);
 app.use("/migratePendaftaran", migratePendaftaranRouter);
 app.use("/capaian", capaian);
+app.use("/inovatif", inovatif);
 
 app.listen(PORT, () => {
   console.log(`Server berjalan di port ${PORT}`);

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Box, Button, Typography, Grid, Paper, List, ListItem, ListItemIcon, ListItemText, MenuItem, IconButton, Menu,Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Dialog, DialogTitle, DialogContent, DialogActions , TextField} from '@mui/material';
 import HomeIcon from '@mui/icons-material/Home';
 import DescriptionIcon from '@mui/icons-material/Description';
@@ -8,20 +8,74 @@ import InfoIcon from '@mui/icons-material/Info';
 import UploadFileIcon from '@mui/icons-material/UploadFile';
 import  ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import Logo from './assets/images/logopilmapres.png';
+import PdfViewer from "./PdfViewer";
 import { useNavigate } from 'react-router-dom';
 
 function BerkasJuri() {
     const [openDialog, setOpenDialog] = useState(false);
+    const [dataDialog, setDataDialog] = useState({});
+    const [berkas, setBerkas] = useState([]);
+    const [search, setSearch] = useState("");
+    const [filteredBerkas, setFilteredBerkas] = useState([]);
+    const [openPdfDialog, setOpenPdfDialog] = useState(false);
+    const [pdfFileUrl, setPdfFileUrl] = useState("");
     const [anchorEl, setAnchorEl] = useState(null);
-    const navigate = useNavigate(); 
+    const navigate = useNavigate();
 
-    const handleUploadClick = (row) => {
+    const handleOpenPdfDialog = (fileName) => {
+        setPdfFileUrl(`http://localhost:5000/uploads/${fileName}`); // Sesuaikan path ke file PDF Anda
+        setOpenPdfDialog(true);
+      };
+    
+      const handleClosePdfDialog = () => {
+        setOpenPdfDialog(false);
+        setPdfFileUrl("");
+      };
+    
+      useEffect(() => {
+        fetchBerkas();
+      }, []);
+    
+      useEffect(() => {
+        if (!search) {
+          setFilteredBerkas(berkas);
+          return;
+        }
+        setFilteredBerkas(
+          berkas.filter((berkas) =>
+            berkas.namaLengkap.toLowerCase().includes(search.toLowerCase())
+          )
+        );
+      }, [search, berkas]);
+    
+      const fetchBerkas = async () => {
+        try {
+          const token = localStorage.getItem("token");
+          const response = await fetch("http://localhost:5000/inovatif", {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              "Authorization": `Bearer ${token}`,
+            },
+          });
+          const data = await response.json();
+          console.log("Data berkas:", data);
+    
+          setBerkas(data);
+        } catch (err) {
+          console.error("Gagal mengambil data berkas:", err);
+        }
+      };
+
+    const handleOpenDialog = (id) => {
         setOpenDialog(true);
-    };
-
-    const handleCloseDialog = () => {
+        setDataDialog({ id });
+      };
+    
+      const handleCloseDialog = () => {
         setOpenDialog(false);
-    };
+        setDataDialog({});
+      };
     
     const handleAccountClick = (event) => {
         setAnchorEl(event.currentTarget);
@@ -50,11 +104,6 @@ function BerkasJuri() {
           console.error('Logout gagal:', err);
         }
       };
-
-      const [berkas] = useState([
-        { id_pengguna: 1, namaberkas: 'Berkas 1', namaLengkap: 'Nama 1', prodi: 'Prodi 1' },
-        { id_pengguna: 2, namaberkas: 'Berkas 2', namaLengkap: 'Nama 2', prodi: 'Prodi 2' },
-      ]);
     
     return (
         <Box sx={{ display: 'flex'}}>
@@ -168,6 +217,15 @@ function BerkasJuri() {
                                 Berkas 
                             </Typography>
                             <TableContainer component={Paper}>
+                                <TextField
+                                    id="search"
+                                    label="Cari nama peserta"
+                                    variant="outlined"
+                                    margin="normal"
+                                    onChange={(e) => {
+                                        setSearch(e.target.value);
+                                    }}
+                                />
                                 <Table>
                                     <TableHead sx={{ backgroundColor: '#1E376D' }}>
                                         <TableRow >
@@ -180,19 +238,23 @@ function BerkasJuri() {
                                         </TableRow>
                                     </TableHead>
                                     <TableBody>
-                                        {berkas.map((row, index) => (
-                                            <TableRow key={row.id_pengguna}  sx={{ backgroundColor: index % 2 === 0 ? '#E8F0FE' : '#ffffff'}}>
+                                        {(filteredBerkas || berkas)?.map((berkas, index) => (
+                                            <TableRow key={index}  sx={{ backgroundColor: index % 2 === 0 ? '#E8F0FE' : '#ffffff'}}>
                                                 <TableCell>{index + 1}</TableCell>
-                                                <TableCell>{row.namaberkas}</TableCell>
-                                                <TableCell>{row.namaLengkap}</TableCell>
-                                                <TableCell>{row.prodi}</TableCell>
-                                                <TableCell>
-                                                    <IconButton>
-                                                        <InfoIcon sx={{ color: '#003366' }} />
-                                                    </IconButton>
+                                                <TableCell>{berkas.nama_berkas}</TableCell>
+                                                <TableCell>{berkas.namaLengkap}</TableCell>
+                                                <TableCell>{berkas.prodi}</TableCell>
+                                                <TableCell>                              
+                                                        <IconButton
+                                                            onClick={() =>
+                                                            handleOpenPdfDialog(berkas.nama_berkas)
+                                                            }
+                                                        >
+                                                            <InfoIcon sx={{ color: "#003366" }} />
+                                                        </IconButton>
                                                 </TableCell>
                                                 <TableCell>
-                                                    <IconButton onClick={() => handleUploadClick(row)} >
+                                                    <IconButton onClick={() => handleOpenDialog()} >
                                                         <UploadFileIcon sx={{ color: '#003366' }} />
                                                     </IconButton>
                                                 </TableCell>
@@ -205,6 +267,20 @@ function BerkasJuri() {
                     </Grid>
                 </Grid>
             </Box>
+            <Dialog
+                open={openPdfDialog}
+                onClose={handleClosePdfDialog}
+                maxWidth="lg"
+                fullWidth
+              >
+                <DialogTitle>View PDF</DialogTitle>
+                <DialogContent>
+                  <PdfViewer fileUrl={pdfFileUrl} />
+                </DialogContent>
+                <DialogActions>
+                  <Button onClick={handleClosePdfDialog}>Close</Button>
+                </DialogActions>
+              </Dialog>
             <Dialog open={openDialog} onClose={handleCloseDialog} disableScrollLock sx={{ '& .MuiDialog-paper': { backgroundColor: '#003366', borderRadius: '12px', color: 'white', width: '80%', padding: 2,  maxWidth: '800px', position: 'absolute', top: 0} }}>
                 <DialogContent>
                     <Paper

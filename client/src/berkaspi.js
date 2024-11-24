@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
     Box, Button, Typography, Paper, List, ListItem, ListItemIcon, ListItemText, Collapse, 
     Grid, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Dialog, DialogActions, 
@@ -13,14 +13,53 @@ import StarIcon from '@mui/icons-material/Star';
 import UploadFileIcon from '@mui/icons-material/UploadFile';
 import  ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import CloseIcon from '@mui/icons-material/Close';
+import InfoIcon from "@mui/icons-material/Info";
 import Logo from './assets/images/logopilmapres.png';
+import PdfViewer from "./PdfViewer";
 import { useNavigate } from 'react-router-dom';
 
 function BerkasPI() {
     const [openBerkas, setOpenBerkas] = useState(false);
     const [openDialog, setOpenDialog] = useState(false);
+    const [file, setFile] = useState(null);
+    const [uploadedFiles, setUploadedFiles] = useState([]);
+    const [openPdfDialog, setOpenPdfDialog] = useState(false);
+    const [pdfFileUrl, setPdfFileUrl] = useState("");
     const [anchorEl, setAnchorEl] = useState(null);
     const navigate = useNavigate();
+
+    const handleOpenPdfDialog = (fileName) => {
+        setPdfFileUrl(`http://localhost:5000/uploads/${fileName}`);
+        setOpenPdfDialog(true);
+      };
+    
+      const handleClosePdfDialog = () => {
+        setOpenPdfDialog(false);
+        setPdfFileUrl("");
+      };
+
+      useEffect(() => {
+        fetchFiles();
+      }, []);
+    
+      const fetchFiles = async () => {
+        try {
+          const response = await fetch("http://localhost:5000/inovatif", {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+          });
+          const data = await response.json();
+          console.log(data);
+    
+          if (response.ok) {
+            setUploadedFiles(data);
+          }
+        } catch (error) {
+          console.error("Gagal mengambil data:", error);
+        }
+      };
 
     const handleToggleBerkas = () => {
         setOpenBerkas(!openBerkas);
@@ -32,7 +71,12 @@ function BerkasPI() {
 
     const handleCloseDialog = () => {
         setOpenDialog(false);
+        setFile(null);
     };
+
+    const handleFileChange = (event) => {
+        setFile(event.target.files[0]);
+      };
 
     const handleAccountClick = (event) => {
         setAnchorEl(event.currentTarget);
@@ -61,13 +105,42 @@ function BerkasPI() {
           console.error('Logout gagal:', err);
         }
       };
-      
-    const rows = [
-        { no: 1, kategori: 'Akademik', bidang: 'Penelitian', wujud: 'Makalah', namaBerkas: 'Makalah Penelitian.pdf', status: 'Sudah Diunggah' },
-        { no: 2, kategori: 'Non-Akademik', bidang: 'Organisasi', wujud: 'Piagam', namaBerkas: 'Piagam Organisasi.pdf', status: 'Belum Diunggah' },
-        { no: 3, kategori: 'Akademik', bidang: 'Lomba', wujud: 'Sertifikat', namaBerkas: 'Sertifikat Lomba.pdf', status: 'Sudah Diunggah' },
-    ];
 
+      const handleSubmit = async (e) => {
+        console.log("handleSubmit dipanggil"); 
+        if (!file) {
+          alert(" file harus diisi!");
+          return;
+        }
+    
+        const formData = new FormData();
+        formData.append("file", file);
+
+        e.preventDefault();
+    
+        try {
+          const response = await fetch("http://localhost:5000/inovatif/upload", {
+            method: "POST",
+            headers: {
+              // "content-type": "application/json",
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+            body: formData,
+          });
+          const data = await response.json();
+    
+          if (data.message) {
+            alert("Berkas berhasil diunggah");
+            fetchFiles();
+            handleCloseDialog();
+          } else {
+            alert(data.error);
+          }
+        } catch (error) {
+          console.error("Gagal mengunggah berkas:", error);
+        }
+      };
+    
     return (
         <Box sx={{ display: 'flex', height: '100vh' }}>
             <Box sx={{ 
@@ -257,20 +330,42 @@ function BerkasPI() {
                                     <TableRow sx={{ backgroundColor: '#003366' }}>
                                         <TableCell sx={{ color: '#ffffff' }}>No</TableCell>
                                         <TableCell sx={{ color: '#ffffff' }}>Nama Berkas</TableCell>
-                                        <TableCell sx={{ color: '#ffffff' }}>Status</TableCell>
+                                        <TableCell sx={{ color: "#FFFFFF", fontWeight: "bold" }}>Aksi</TableCell>
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
-                                    {rows.map((row, index) => (
-                                        <TableRow key={row.no} sx={{ backgroundColor: index % 2 === 0 ? '#E8F0FE' : '#ffffff'}} >
-                                            <TableCell>{row.no}</TableCell>
-                                            <TableCell>{row.namaBerkas}</TableCell>
-                                            <TableCell>{row.status}</TableCell>
+                                    {uploadedFiles.map((file, index) => (
+                                        <TableRow key={index} sx={{ backgroundColor: index % 2 === 0 ? '#E8F0FE' : '#ffffff'}} >
+                                            <TableCell>{index + 1}</TableCell>
+                                            <TableCell>{file.nama_berkas}</TableCell>
+                                            <TableCell>
+                                                <IconButton
+                                                    onClick={() =>
+                                                    handleOpenPdfDialog(file.nama_berkas)
+                                                    }
+                                                >
+                                                    <InfoIcon sx={{ color: "#003366" }} />
+                                                </IconButton>
+                                            </TableCell>
                                         </TableRow>
                                     ))}
                                 </TableBody>
                             </Table>
                         </TableContainer>
+                        <Dialog
+                            open={openPdfDialog}
+                            onClose={handleClosePdfDialog}
+                            maxWidth="lg"
+                            fullWidth
+                        >
+                            <DialogTitle>View PDF</DialogTitle>
+                            <DialogContent>
+                                <PdfViewer fileUrl={pdfFileUrl} />
+                            </DialogContent>
+                            <DialogActions>
+                                <Button onClick={handleClosePdfDialog}>Close</Button>
+                            </DialogActions>
+                        </Dialog>
                         <Dialog open={openDialog} onClose={handleCloseDialog} 
                             sx={{ '& .MuiDialog-paper': { backgroundColor: '#003366', borderRadius: '8px', color: 'white', width: '100%' } }}>
                             <DialogTitle>
@@ -285,17 +380,22 @@ function BerkasPI() {
                             <DialogContent>
                              <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: 2}} >
                                 <Button 
-                                variant="contained" 
-                                component="label"
-                                sx={{ backgroundColor: '#1E376D', color: '#FFFFFF', borderRadius: '4px', textTransform: 'none', }}>
-                                Choose File
-                                <input type="file" hidden />
+                                    variant="contained" 
+                                    component="label"
+                                    sx={{ backgroundColor: '#1E376D', color: '#FFFFFF', borderRadius: '4px', textTransform: 'none', }}>
+                                    Choose File
+                                    <input
+                                        type="file"
+                                        hidden
+                                        onChange={handleFileChange}
+                                        accept="application/pdf"
+                                    />
                                 </Button>
                              </Box> 
                             </DialogContent>
                             <DialogActions>
                                 <Button onClick={handleCloseDialog} sx={{  backgroundColor: '#FE651F', color: '#FFFFFF', borderRadius: '4px' }}>Batal</Button>
-                                <Button onClick={handleCloseDialog} sx={{ backgroundColor: '#0DBD2E', color: '#FFFFFF', borderRadius: '4px' }}>Unggah</Button>
+                                <Button onClick={handleSubmit} sx={{ backgroundColor: '#0DBD2E', color: '#FFFFFF', borderRadius: '4px' }}>Unggah</Button>
                             </DialogActions>
                         </Dialog>
                      </Paper>
