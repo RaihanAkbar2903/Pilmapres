@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Box, Button, Typography, Grid, Paper, List, ListItem, ListItemIcon, ListItemText, MenuItem, IconButton, Menu,Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Dialog, DialogTitle, DialogContent, DialogActions, TextField } from '@mui/material';
 import HomeIcon from '@mui/icons-material/Home';
 import DescriptionIcon from '@mui/icons-material/Description';
@@ -11,10 +11,30 @@ import { useNavigate } from 'react-router-dom';
 
 function PresentasiJuri() {
     const [openDialog, setOpenDialog] = useState(false);
-    const [setSelectedPeserta] = useState(null);
     const [anchorEl, setAnchorEl] = useState(null);
+    const [dataPresentasi, setDataPresentasi] = useState([]);
     const navigate = useNavigate(); 
 
+    useEffect(() => {
+        fetchData();
+    }, []);
+    const fetchData = async () => {
+        try {
+            const response = await fetch('http://localhost:5000/jadwalpresensi',{
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    "Authorization": `Bearer ${localStorage.getItem('token')}`,
+                },
+            });
+            const data = await response.json();
+            console.log('Data Presentasi:', data);
+            
+            setDataPresentasi(data);
+        } catch (err) {
+            console.error('Gagal mengambil data presentasi:', err);
+        }
+    };
     const [formValues, setFormValues] = useState({
         content: '',
         accuracy: '',
@@ -24,13 +44,11 @@ function PresentasiJuri() {
     });
 
     const handleInfoClick = (peserta) => {
-        setSelectedPeserta(peserta);
         setOpenDialog(true);
     };
     
     const handleCloseDialog = () => {
         setOpenDialog(false);
-        setSelectedPeserta(null);
     };
 
     const handleChange = (e) => {
@@ -73,15 +91,6 @@ function PresentasiJuri() {
           console.error('Logout gagal:', err);
         }
       };
-
-      const peserta = [
-        {
-            id_pengguna: 1,
-            namaBerkas: "3312311005",
-            namaLengkap: "Muhammad Alfath Ramadhan",
-            prodi: "D3 Teknik Informatika",
-        }
-    ];
     
     return (
         <Box sx={{ display: 'flex'}}>
@@ -199,17 +208,17 @@ function PresentasiJuri() {
                                     <TableHead sx={{ backgroundColor: '#1E376D' }}>
                                         <TableRow >
                                             <TableCell sx={{ color: '#FFFFFF'}}>No</TableCell>
-                                            <TableCell sx={{ color: '#FFFFFF'}}>Nama Berkas</TableCell>
+                                            <TableCell sx={{ color: '#FFFFFF'}}>NIM</TableCell>
                                             <TableCell sx={{ color: '#FFFFFF'}}>Nama Peserta</TableCell>
                                             <TableCell sx={{ color: '#FFFFFF'}}>Prodi</TableCell>
                                             <TableCell sx={{ color: '#FFFFFF'}}>Nilai</TableCell>
                                         </TableRow>
                                     </TableHead>
                                     <TableBody>
-                                        {peserta.map((row, index) => (
+                                        {dataPresentasi?.map((row, index) => (
                                             <TableRow key={row.id_pengguna}  sx={{ backgroundColor: index % 2 === 0 ? '#E8F0FE' : '#ffffff'}}>
                                                 <TableCell>{index + 1}</TableCell>
-                                                <TableCell>{row.namaBerkas}</TableCell>
+                                                <TableCell>{row.nim}</TableCell>
                                                 <TableCell>{row.namaLengkap}</TableCell>
                                                 <TableCell>{row.prodi}</TableCell>
                                                 <TableCell>

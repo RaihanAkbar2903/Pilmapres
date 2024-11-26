@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Box, Button, Typography, Grid, Paper, List, ListItem, ListItemIcon, ListItemText, Collapse, IconButton, Menu, MenuItem } from '@mui/material';
 import HomeIcon from '@mui/icons-material/Home';
 import DescriptionIcon from '@mui/icons-material/Description';
@@ -23,6 +23,23 @@ function Informasi() {
     const [fontSize] = useState(16);
     const navigate = useNavigate();
 
+    useEffect(() => {
+        fetchData();
+    }, []);
+
+    const fetchData = async () => {
+        try {
+            const response = await fetch('http://localhost:5000/informasi');
+            if (response.ok) {
+                const data = await response.json();
+                setInformasiText(data.konten);
+            } else {
+                throw new Error('Gagal mengambil data informasi');
+            }
+        } catch (error) {
+            console.error('Gagal mengambil data informasi:', error);
+        }
+    };
     const handleToggleLaman = () => {
         setOpenLaman(!openLaman);
     };
@@ -55,8 +72,27 @@ function Informasi() {
         }
       };
 
-    const handleSaveInformasi = () => {
-        console.log('Informasi disimpan:', informasiText);
+    const handleSaveInformasi = async () => {
+        try {
+
+            const response =await fetch('http://localhost:5000/informasi', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ konten: informasiText }),
+            });
+
+            if (response.ok) {
+                alert('Informasi berhasil disimpan');
+            } else {
+                fetchData();
+                throw new Error('Gagal menyimpan informasi');
+            }
+
+        } catch (error) {
+            console.error('Gagal menyimpan informasi:', error);
+        }
     };
     return (
         <Box sx={{ display: 'flex'}}>
