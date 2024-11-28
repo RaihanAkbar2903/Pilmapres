@@ -20,35 +20,48 @@ import DashboardJuri from './dashboardjuri';
 import Peserta from './peserta';
 import BerkasJuri from './berkasjuri';
 import PresentasiJuri from './presentasijuri';
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 
 function App() {
   return (
+    <LocalizationProvider dateAdapter={AdapterDayjs}>
       <Router>
         <Routes>
-          <Route path="/" element={<Landing />} ></Route>
-          <Route path="/login" element={<Login />} ></Route>
-          <Route path="/registrasi" element={<Registrasi />} ></Route>
-          
+          <Route path="/" element={<Landing />}></Route>
+          <Route path="/login" element={<Login />}></Route>
+          <Route path="/registrasi" element={<Registrasi />}></Route>
+
           <Route element={<ProtectedRoute />}>
-            <Route path="/dashboardmahasiswa" element={<DashboardMahasiswa />} ></Route>
-            <Route path="/berkascu" element={<BerkasCU />} ></Route>
-            <Route path="/berkaspi" element={<BerkasPI />} ></Route>
-            <Route path="/jadwal" element={<Jadwal />} ></Route>
-            <Route path="/hasil" element={<Hasil />} ></Route>
-            <Route path="/banner" element={<Banner />} ></Route>
-            <Route path="/informasi" element={<Informasi />} ></Route>
-            <Route path="/jadwalpilmapres" element={<JadwalPilmapres />} ></Route>
-            <Route path="/dashboardadmin" element={<DashboardAdmin />} ></Route>
-            <Route path="/datapengguna" element={<DataPengguna />} ></Route>
-            <Route path="/berkasadmincu" element={<BerkasAdminCU />} ></Route>
-            <Route path="/jadwalpresentasi" element={<JadwalPresentasi />} ></Route>
-            <Route path="/dashboardjuri" element={<DashboardJuri />} ></Route>
-            <Route path="/peserta" element={<Peserta />} ></Route>
-            <Route path="/berkasjuri" element={<BerkasJuri />} ></Route>
-            <Route path="/presentasijuri" element={<PresentasiJuri />} ></Route>
+            <Route
+              path="/dashboardmahasiswa"
+              element={<DashboardMahasiswa />}
+            ></Route>
+            <Route path="/berkascu" element={<BerkasCU />}></Route>
+            <Route path="/berkaspi" element={<BerkasPI />}></Route>
+            <Route path="/jadwal" element={<Jadwal />}></Route>
+            <Route path="/hasil" element={<Hasil />}></Route>
+            <Route path="/banner" element={<Banner />}></Route>
+            <Route path="/informasi" element={<Informasi />}></Route>
+            <Route
+              path="/jadwalpilmapres"
+              element={<JadwalPilmapres />}
+            ></Route>
+            <Route path="/dashboardadmin" element={<DashboardAdmin />}></Route>
+            <Route path="/datapengguna" element={<DataPengguna />}></Route>
+            <Route path="/berkasadmincu" element={<BerkasAdminCU />}></Route>
+            <Route
+              path="/jadwalpresentasi"
+              element={<JadwalPresentasi />}
+            ></Route>
+            <Route path="/dashboardjuri" element={<DashboardJuri />}></Route>
+            <Route path="/peserta" element={<Peserta />}></Route>
+            <Route path="/berkasjuri" element={<BerkasJuri />}></Route>
+            <Route path="/presentasijuri" element={<PresentasiJuri />}></Route>
           </Route>
         </Routes>
       </Router>
+    </LocalizationProvider>
   );
 }
 

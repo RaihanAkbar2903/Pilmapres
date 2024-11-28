@@ -12,27 +12,27 @@ router.get("/", (req, res) => {
   jwt.verify(token, "mySuperSecretKey", (err, user) => {
     if (err) return res.status(403).json({ error: "Token tidak valid" });
     console.log(user);
-    
+   
     if (user.role == "Admin") {
       const query =
-        "SELECT j.id, namaLengkap, hari_tanggal , waktu, j.tempat FROM jadwal_presensi as j JOIN pendaftaran ON j.id_pendaftaran = pendaftaran.id";
+        "SELECT j.id, namaLengkap, hari_tanggal , waktu, j.tempat FROM jadwal_presentasi as j JOIN pendaftaran ON j.id_pendaftaran = pendaftaran.id";
       db.query(query, (err, results) => {
         if (err) return res.status(500).json({ error: err });
-        res.json(results);
+        return res.json(results);
       });
-    } if (user.role == "Juri") {
+    } else if (user.role == "Juri") {
       const query =
-        "SELECT j.id, namaLengkap, nim , prodi FROM jadwal_presensi as j JOIN pendaftaran ON j.id_pendaftaran = pendaftaran.id";
+        "SELECT j.id, namaLengkap, nim , prodi FROM jadwal_presentasi as j JOIN pendaftaran ON j.id_pendaftaran = pendaftaran.id";
       db.query(query, (err, results) => {
         if (err) return res.status(500).json({ error: err });
-        res.json(results);
+        return res.json(results);
       });
-     } else {
+    } else {
       const query =
-        "SELECT j.id, namaLengkap, hari_tanggal , waktu, j.tempat FROM jadwal_presensi as j JOIN pendaftaran ON j.id_pendaftaran = pendaftaran.id WHERE j.id_pendaftaran = ?";
+        "SELECT j.id, namaLengkap, hari_tanggal , waktu, j.tempat FROM jadwal_presentasi as j JOIN pendaftaran ON j.id_pendaftaran = pendaftaran.id WHERE j.id_pendaftaran = ?";
       db.query(query, [user.id_pendaftaran], (err, results) => {
         if (err) return res.status(500).json({ error: err });
-        res.json(results[0]);
+        return res.json(results[0]);
       });
     }
   });
@@ -42,7 +42,7 @@ router.get("/nama", (req, res) => {
   const query = "SELECT id, namaLengkap FROM pendaftaran";
   db.query(query, (err, results) => {
     if (err) return res.status(500).json({ error: err });
-    res.json(results);
+    return res.json(results);
   });
 });
 
@@ -55,7 +55,7 @@ router.post("/", async (req, res) => {
 
   const [cekpeserta] = await db
     .promise()
-    .query("SELECT * FROM jadwal_presensi WHERE id_pendaftaran = ?", [peserta]);
+    .query("SELECT * FROM jadwal_presentasi WHERE id_pendaftaran = ?", [peserta]);
 
   if (cekpeserta[0]) {
     return res
@@ -64,17 +64,17 @@ router.post("/", async (req, res) => {
   }
 
   const query =
-    "INSERT INTO jadwal_presensi (id_pendaftaran, hari_tanggal, waktu, tempat) VALUES (?, ?, ?, ?)";
+    "INSERT INTO jadwal_presentasi (id_pendaftaran, hari_tanggal, waktu, tempat) VALUES (?, ?, ?, ?)";
   db.query(query, [peserta, haritanggal, waktu, tempat], (err, results) => {
     if (err) return res.status(500).json({ error: err });
-    res.status(200).json(results);
+    return res.status(200).json(results);
   });
 });
 
 router.put("/:id", async (req, res) => {
   const [cekJadwal] = await db
     .promise()
-    .query("SELECT * FROM jadwal_presensi WHERE id = ?", [req.params.id]);
+    .query("SELECT * FROM jadwal_presentasi WHERE id = ?", [req.params.id]);
 
   if (!cekJadwal[0]) {
     return res.status(404).json({ error: "Jadwal tidak ditemukan" });
@@ -87,13 +87,13 @@ router.put("/:id", async (req, res) => {
   }
 
   const query =
-    "UPDATE jadwal_presensi SET hari_tanggal = ?, waktu = ?, tempat = ? WHERE id = ?";
+    "UPDATE jadwal_presentasi SET hari_tanggal = ?, waktu = ?, tempat = ? WHERE id = ?";
   db.query(
     query,
     [haritanggal, waktu, tempat, req.params.id],
     (err, results) => {
       if (err) return res.status(500).json({ error: err });
-      res.status(200).json({ message: "Jadwal berhasil diubah" });
+      return res.status(200).json({ message: "Jadwal berhasil diubah" });
     }
   );
 });
@@ -101,16 +101,16 @@ router.put("/:id", async (req, res) => {
 router.delete("/:id", async (req, res) => {
   const [cekJadwal] = await db
     .promise()
-    .query("SELECT * FROM jadwal_presensi WHERE id = ?", [req.params.id]);
+    .query("SELECT * FROM jadwal_presentasi WHERE id = ?", [req.params.id]);
 
   if (!cekJadwal[0]) {
     return res.status(404).json({ error: "Jadwal tidak ditemukan" });
   }
 
-  const query = "DELETE FROM jadwal_presensi WHERE id = ?";
+  const query = "DELETE FROM jadwal_presentasi WHERE id = ?";
   db.query(query, [req.params.id], (err, results) => {
     if (err) return res.status(500).json({ error: err });
-    res.status(200).json({ message: "Jadwal berhasil dihapus" });
+    return res.status(200).json({ message: "Jadwal berhasil dihapus" });
   });
 });
 

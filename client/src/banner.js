@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Box, Button, Typography, Grid, Paper, List, ListItem, ListItemIcon, ListItemText, Collapse, IconButton, DialogTitle, DialogContent, MenuItem, DialogActions, Dialog, Menu } from '@mui/material';
 import HomeIcon from '@mui/icons-material/Home';
 import DescriptionIcon from '@mui/icons-material/Description';
@@ -19,8 +19,23 @@ function Banner() {
     const [openLaman, setOpenLaman] = useState(false);
     const [anchorEl, setAnchorEl] = useState(null);
     const [openDialog, setOpenDialog] =useState(false);
+    const [dataBanner, setDataBanner] = useState(null);
     const [newBanner, setNewBanner] = useState(null);
     const navigate = useNavigate();
+
+    useEffect(() => {
+        fetchDataBanner();
+    }, []);
+
+    const fetchDataBanner = async () => {
+        try {
+            const response = await fetch('http://localhost:5000/banner');
+            const data = await response.json();
+            setDataBanner(data);
+        } catch (error) {
+            console.error('Gagal mengambil data banner:', error);
+        }
+    }
 
     const handleToggleLaman = () => {
         setOpenLaman(!openLaman);
@@ -66,9 +81,25 @@ function Banner() {
         setNewBanner(event.target.files[0]);
     };
 
-    const handleBannerSave = () => {
-        console.log('Banner baru:', newBanner);
-        handleCloseDialog();
+    const handleBannerSave = async () => {
+        try {
+            const formData = new FormData();
+            formData.append('image', newBanner);
+            const response = await fetch('http://localhost:5000/banner', {
+                method: 'POST',
+                body: formData,
+            });
+            console.log(response);
+            
+            if (!response.ok) {
+                throw new Error('Gagal menyimpan banner');
+            }
+            fetchDataBanner();
+            handleCloseDialog();
+            console.log('Berhasil menyimpan banner');
+        } catch (error) {
+            console.error('Gagal menyimpan banner:', error);
+        }
     }
 
     return (
@@ -252,7 +283,7 @@ function Banner() {
                                 Banner
                             </Typography>
                             <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginTop: 2 }}>
-                                <img src={BannerImage} alt="Current Banner" style={{ width: '100%', maxWidth: '750px', borderRadius: '8px' }} />
+                                <img src={`http://localhost:5000/uploads/${dataBanner?.image}`} alt="Current Banner" style={{ width: '100%', maxWidth: '750px', borderRadius: '8px' }} />
                                 <Button variant="contained" onClick={handleOpenDialog} sx={{ marginTop: 4, alignSelf: 'flex-end', fontSize: '1rem', color: 'white', backgroundColor: '#003366' }}>
                                     Edit Banner
                                 </Button>

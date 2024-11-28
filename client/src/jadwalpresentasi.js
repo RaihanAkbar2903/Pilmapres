@@ -42,6 +42,8 @@ import EditIcon from "@mui/icons-material/Edit";
 import ExitToAppIcon from "@mui/icons-material/ExitToApp";
 import DeleteIcon from "@mui/icons-material/Delete";
 import Logo from "./assets/images/logopilmapres.png";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import dayjs from "dayjs";
 import { useNavigate } from "react-router-dom";
 
 function JadwalPresentasi() {
@@ -85,13 +87,13 @@ function JadwalPresentasi() {
 
   const fetchJadwal = async () => {
     try {
-        const response = await fetch("http://localhost:5000/jadwalpresensi",{
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-              "Authorization": `Bearer ${localStorage.getItem("token")}`,
-            },
-          })
+      const response = await fetch("http://localhost:5000/jadwalpresentasi",{
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
       if (response.ok) {
         const data = await response.json();
         setJadwal(data); // Assuming response data is in JSON format
@@ -106,7 +108,7 @@ function JadwalPresentasi() {
   const fetchNama = async () => {
     try {
       const response = await fetch(
-        "http://localhost:5000/jadwalpresensi/nama",
+        "http://localhost:5000/jadwalpresentasi/nama",
         {
           method: "GET",
           headers: {
@@ -128,7 +130,7 @@ function JadwalPresentasi() {
   const handleSaveTambah = async () => {
     try {
       // Assuming you want to make an API call or handle async operations here
-      const response = await fetch("http://localhost:5000/jadwalpresensi", {
+      const response = await fetch("http://localhost:5000/jadwalpresentasi", {
         method: "POST",
         body: JSON.stringify(newJadwal),
         headers: { "Content-Type": "application/json" },
@@ -139,7 +141,7 @@ function JadwalPresentasi() {
         fetchJadwal();
         setOpenTambah(false);
       } else if (response.status === 400) {
-        alert("Peserta sudah terdaftar di jadwal presensi!");
+        alert("Peserta sudah terdaftar di jadwal presetasi!");
       } else {
         alert("Semua data harus diisi!");
         console.log("Error saat menambah jadwal");
@@ -162,7 +164,7 @@ function JadwalPresentasi() {
     setEditedJadwal({
       id: jadwal.id,
       peserta: jadwal.namaLengkap,
-      haritanggal: jadwal.haritanggal,
+      haritanggal: dayjs(jadwal.hari_tanggal).format("YYYY-MM-DD"),
       tempat: jadwal.tempat,
       waktu: jadwal.waktu,
     });
@@ -182,7 +184,7 @@ function JadwalPresentasi() {
   const handleSaveEdit = async () => {
     try {
       const response = await fetch(
-        `http://localhost:5000/jadwalpresensi/${selectedJadwal.id}`,
+        `http://localhost:5000/jadwalpresentasi/${selectedJadwal.id}`,
         {
           method: "PUT",
           body: JSON.stringify(editedJadwal),
@@ -211,7 +213,7 @@ function JadwalPresentasi() {
   const handleDeleteConfirm = async () => {
     try {
       const response = await fetch(
-        `http://localhost:5000/jadwalpresensi/${selectedJadwal.id}`,
+        `http://localhost:5000/jadwalpresentasi/${selectedJadwal.id}`,
         {
           method: "DELETE",
         }
@@ -600,7 +602,7 @@ function JadwalPresentasi() {
             sx={{ backgroundColor: "#FFFFFF", borderRadius: "4px" }}
           />
           <InputLabel sx={{ color: "white" }}>Hari/Tanggal</InputLabel>
-          <TextField
+          {/* <TextField
             margin="dense"
             type="date"
             fullWidth
@@ -608,6 +610,16 @@ function JadwalPresentasi() {
             value={editedJadwal.haritanggal}
             onChange={handleChange}
             sx={{ backgroundColor: "#FFFFFF", borderRadius: "4px" }}
+          /> */}
+          <DatePicker
+            value={dayjs(editedJadwal.haritanggal)}
+            onChange={(newValue) => {
+              setEditedJadwal((prevState) => ({
+                ...prevState,
+                haritanggal: dayjs(newValue).format("YYYY-MM-DD"),
+              }));
+            }}
+            sx={{ backgroundColor: "#FFFFFF", borderRadius: "4px", width: "100%" }}
           />
           <InputLabel sx={{ color: "white" }}>Tempat</InputLabel>
           <TextField

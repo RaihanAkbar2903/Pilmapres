@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Box, Button, Typography, Grid, Paper, List, ListItem, ListItemIcon, ListItemText, MenuItem, IconButton, Menu } from '@mui/material';
 import HomeIcon from '@mui/icons-material/Home';
 import DescriptionIcon from '@mui/icons-material/Description';
@@ -11,8 +11,22 @@ import { useNavigate } from 'react-router-dom';
 
 function DashboardJuri() {
     const [anchorEl, setAnchorEl] = useState(null);
+    const [dataBanner, setDataBanner] = useState([]);
     const navigate = useNavigate(); 
 
+    useEffect(() => {
+        fetchDataBanner();
+    }, []);
+
+    const fetchDataBanner = async () => {
+        try {
+            const response = await fetch('http://localhost:5000/banner');
+            const data = await response.json();
+            setDataBanner(data);
+        } catch (err) {
+            console.error('Terjadi kesalahan:', err);
+        }
+    };
     const handleAccountClick = (event) => {
         setAnchorEl(event.currentTarget);
     };
@@ -156,7 +170,7 @@ function DashboardJuri() {
                             </Typography>
                             <img 
                                 alt="Banner Pilmapres" 
-                                src={Banner}
+                                src={`http://localhost:5000/uploads/${dataBanner?.image}`}
                                 style={{ width: '80%', height: 'auto' }} 
                             />
                         </Paper>

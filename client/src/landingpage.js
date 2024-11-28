@@ -3,18 +3,44 @@ import { AppBar, Toolbar, Button, Box, Container, Grid, Paper, Typography, Table
 import { useNavigate } from "react-router-dom";
 import Logo from './assets/images/logopilmapres.png';
 import Banner from './assets/images/bannnerpilmapres.jpeg';
+import dayjs from 'dayjs';
 
 function Landing() {
   const navigate = useNavigate();
 
   const [dataInformasi, setDataInformasi] = useState("");
+  const [dataJadwal, setDataJadwal] = useState("");
+  const [dataBanner, setDataBanner] = useState({});
   const informasiRef = useRef(null);
   const jadwalRef = useRef(null);
   const kontakRef = useRef(null);
 
   useEffect(() => {
     fetchDataInformasi();
+    fetchDataJadwal();
+    fetchDataBanner();
+    console.log(dataJadwal);
   }, []);
+
+  const fetchDataBanner = async () => {
+      try {
+          const response = await fetch('http://localhost:5000/banner');
+          const data = await response.json();
+          setDataBanner(data);
+      } catch (error) {
+          console.error('Gagal mengambil data banner:', error);
+      }
+  };
+
+  const fetchDataJadwal = async () => {
+    try {
+      const response = await fetch("http://localhost:5000/jadwal");
+      const data = await response.json();
+      setDataJadwal(data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   const fetchDataInformasi = async () => {
     try {
@@ -41,23 +67,6 @@ function Landing() {
   const handleRegistrasiClick = () => {
     navigate('/Registrasi');
   };
-
-
-  // Data Jadwal 
-  const jadwal = [
-    { tanggal: 'Februari', acara: 'Sosialisasi Pedoman Pilmapres di LLDIKTI' },
-    { tanggal: '17 April', acara: 'Batas Akhir Pendaftaran Mapres Perguruan Tinggi ke LLDIKTI' },
-    { tanggal: '19 April', acara: 'Pengiriman data jumlah peserta masing-masing LLDIKTI ke BPTI melalui alamat email bpti@kemdikbud.go.id' },
-    { tanggal: '1 - 10 Mei', acara: 'Pembuatan akun operator LLDikti' },
-    { tanggal: '2 - 10 Mei', acara: 'Seleksi Wilayah Mapres di LLDikti' },
-    { tanggal: '12 - 15 Mei', acara: 'Laporan LLDikti ke BPTI Terkait hasil seleksi Mapres' },
-    { tanggal: '17 Mei', acara: 'Pengumuman daftar peserta yang berhak mengikuti Seleksi Awal Nasional oleh BPTI' },
-    { tanggal: '20 - 24 Mei', acara: 'Peserta Seleksi Awal Nasional Mengunggah berkas yang dipersyaratkan' },
-    { tanggal: '27 Mei - 24 Juni', acara: 'Seleksi Awal Nasional Mapres' },
-    { tanggal: '28 Juni 2024', acara: 'Pengumuman daftar peserta yang berhak mengikuti Seleksi Final Nasional oleh BPTI' },
-    { tanggal: '20 - 24 Juli', acara: 'Peserta Seleksi Awal Nasional Mengunggah berkas yang dipersyaratkan' },
-    { tanggal: '24 - 28 Juli', acara: 'Pelaksanaan Seleksi Final Nasional' },
-  ];
 
   return (
     <>
@@ -150,7 +159,7 @@ function Landing() {
           <Grid item xs={12}>
             <Paper>
               <img
-                src={Banner}
+                src={`http://localhost:5000/uploads/${dataBanner?.image}`}
                 alt="Banner Pilmapres"
                 style={{ width: "100%", height: "auto" }}
               />
@@ -169,53 +178,9 @@ function Landing() {
 
               {dataInformasi && (
                 // <Typography variant="body1" component="p">
-                  <div dangerouslySetInnerHTML={{ __html: dataInformasi }} />
+                <div dangerouslySetInnerHTML={{ __html: dataInformasi }} />
                 // {/* </Typography> */}
               )}
-              {/* <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                <Box sx={{ display: 'flex', flexDirection: 'column', marginRight: '20px' }}>
-                  <img
-                    src={Logo}
-                    alt="Logo Pilmapres"
-                    style={{ width: '120px', height: '120px', marginBottom: '20px' }}
-                  />
-                </Box>
-
-                <Typography variant="body1" component="p">
-                  Pilmapres atau Pemilihan Mahasiswa Berprestasi merupakan kompetisi mahasiswa yang
-                  diselenggarakan oleh Pusat Prestasi Nasional yang ada di bawah naungan Kementerian Riset,
-                  Teknologi, dan Pendidikan Tinggi setiap tahunnya. Tujuannya adalah untuk memberikan apresiasi
-                  kepada mahasiswa terbaik yang siap menjadi agen perubahan untuk membangun Indonesia yang lebih
-                  baik. Dengan fokus program Sarjana dan Diploma.
-                </Typography>
-              </Box>
-
-              <Typography
-                variant="h5"
-                style={{ marginTop: '20px', color: '#e74c3c', fontWeight: 'bold' }}
-              >
-                Tujuan
-              </Typography>
-              <Typography variant="body1" component="p" style={{ marginLeft: '20px', marginBottom: '10px' }}>
-                1. Menguatnya kesadaran pengelola kampus untuk memfasilitasi kreativitas mahasiswa melalui kegiatan
-                intrakurikuler, kokurikuler, dan ekstrakurikuler.
-                <br />
-                2. Meningkatnya kesadaran kampus dalam memberikan penghargaan kepada mahasiswa berprestasi.
-                <br />
-                3. Meningkatnya jumlah gagasan kreatif mahasiswa untuk pembangunan yang berasal dari kampus.
-              </Typography>
-
-              <Typography
-                variant="h5"
-                style={{ marginTop: '10px', color: '#e74c3c', fontWeight: 'bold' }}
-              >
-                Sasaran
-              </Typography>
-              <Typography variant="body1" component="p" style={{ marginLeft: '20px' }}>
-                1. Terselenggaranya kegiatan untuk mengases dan menetapkan peraih gelar mahasiswa berprestasi.
-                <br />
-                2. Meningkatnya jumlah peserta Pilmapres.
-              </Typography> */}
             </Paper>
           </Grid>
 
@@ -247,16 +212,21 @@ function Landing() {
                     </TableRow>
                   </TableHead>
                   <TableBody>
-                    {jadwal.map((row, index) => (
-                      <TableRow key={index}>
-                        <TableCell
-                          style={{ color: "#e74c3c", fontWeight: "bold" }}
-                        >
-                          {row.tanggal}
-                        </TableCell>
-                        <TableCell>{row.acara}</TableCell>
-                      </TableRow>
-                    ))}
+                    {dataJadwal &&
+                      dataJadwal.map((row, index) => (
+                        <TableRow key={index}>
+                          <TableCell
+                            style={{ color: "#e74c3c", fontWeight: "bold" }}
+                          >
+                            {row.tanggal_berakhir
+                              ? dayjs(row.tanggal_mulai).format("D MMM") +
+                                " - " +
+                                dayjs(row.tanggal_berakhir).format("D MMM")
+                              : dayjs(row.tanggal_mulai).format("D MMM")}
+                          </TableCell>
+                          <TableCell>{row.acara}</TableCell>
+                        </TableRow>
+                      ))}
                   </TableBody>
                 </Table>
               </TableContainer>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Box, Button, Typography, Grid, Paper, List, ListItem, ListItemIcon, ListItemText, Collapse, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, IconButton, DialogTitle, DialogContent, TextField, InputLabel, MenuItem, DialogActions, Dialog, Menu } from '@mui/material';
 import HomeIcon from '@mui/icons-material/Home';
 import DescriptionIcon from '@mui/icons-material/Description';
@@ -14,37 +14,86 @@ import EditIcon from '@mui/icons-material/Edit';
 import  ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import DeleteIcon from '@mui/icons-material/Delete';
 import Logo from './assets/images/logopilmapres.png';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { useNavigate } from 'react-router-dom';
+import dayjs from 'dayjs';
 
 function JadwalPilmapres() {
     const [openLaman, setOpenLaman] = useState(false);
     const [openEdit, setOpenEdit] = useState(false); 
     const [openDelete, setOpenDelete] = useState(false);
     const [openTambah, setOpenTambah] = useState(false);
+    const [dataJadwal, setDataJadwal] = useState([]);
     const [newJadwal, setNewJadwal] = useState({
-        tanggal: '',
-        agenda:'',
+        tanggal_mulai: '',
+        tanggal_berakhir: '',
+        acara:'',
     }); 
 
     const [selectedJadwal, setSelectedJadwal] = useState(null); 
     const [editedJadwal, setEditedJadwal] = useState({
-        tanggal: '',
-        agenda: '',
+      tanggal_mulai: "",
+      tanggal_berakhir: "",
+      acara: "",
     });
     const [anchorEl, setAnchorEl] = useState(null);
     const navigate = useNavigate();
 
+    useEffect(() => {
+        fetchData();
+    }, []);
+
+    const fetchData = async () => {
+        try {
+            const response = await fetch('http://localhost:5000/jadwal');
+            const result = await response.json();
+            setDataJadwal(result);
+            // console.log(result);
+            // console.log(
+            //   new Date(result[0].tanggal_mulai).toLocaleDateString("id-ID", {
+            //     month: "2-digit",
+            //     day: "2-digit",
+            //     year: "numeric",
+            //   })
+            // );
+            console.log('Data jadwal:', result);
+            
+        } catch (err) {
+            console.error(err);
+        }
+    };
+
     const handleTambahClick = () => {
         setNewJadwal({
-            tanggal: '',
-            agenda: '',
-         });
+          tanggal_mulai: "",
+          tanggal_berakhir: "",
+          acara: "",
+        });
          setOpenTambah(true);
     }
 
-    const handleSaveTambah = () => {
-        console.log("Data Jadwal Baru: ", newJadwal);
-        setOpenTambah(false);
+    const handleSaveTambah = async () => {
+        try {
+            const response = await fetch('http://localhost:5000/jadwal', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(newJadwal),
+            });
+
+            if (!response.ok) {
+                throw new Error('Ada kesalahan dalam proses tambah data');
+            }
+
+            const result = await response.json();
+            console.log('Data berhasil ditambahkan:', result);
+            fetchData();
+            
+            setOpenTambah(false);
+        } catch (err) {
+            console.error(err);
+        }
     };
 
     const handleChangeTambah = (e) => {
@@ -55,9 +104,14 @@ function JadwalPilmapres() {
         }));
     };
 
-    const handleEditClick = (jadwal) => {
-        setSelectedJadwal(jadwal);
-        setEditedJadwal({ tanggal: jadwal.tanggal, agenda: jadwal.agenda }); 
+    const handleEditClick = async (jadwal) => {
+        // setSelectedJadwal(jadwal);
+        console.log("Data jadwal yang diubah:", jadwal);
+        setEditedJadwal({
+            ...jadwal,
+            tanggal_mulai: dayjs(jadwal.tanggal_mulai).format('YYYY-MM-DD'),
+            tanggal_berakhir: dayjs(jadwal.tanggal_berakhir).format('YYYY-MM-DD'),
+        }); 
         setOpenEdit(true); 
     };
 
@@ -66,14 +120,48 @@ function JadwalPilmapres() {
         setOpenDelete(true); 
     };
 
-    const handleSaveEdit = () => {
-        console.log("Data jadwal yang diubah:", editedJadwal);
-        setOpenEdit(false);
+    const handleSaveEdit = async () => {
+        try {
+            const response = await fetch(`http://localhost:5000/jadwal/${editedJadwal.id}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(editedJadwal),
+            });
+
+            console.log("Data jadwal yang diubah:", editedJadwal);
+            if (!response.ok) {
+                throw new Error('Ada kesalahan dalam proses ubah data');
+            }
+
+            const result = await response.json();
+            console.log('Data berhasil diubah:', result);
+            fetchData();
+            setOpenEdit(false);
+        } catch (err) {
+            console.error(err);
+        }
     };
 
-    const handleDeleteConfirm = () => {
-        console.log("Data jadwal yang dihapus:", selectedJadwal);
-        setOpenDelete(false);
+    const handleDeleteConfirm = async () => {
+        try {
+            const response = await fetch(`http://localhost:5000/jadwal/${selectedJadwal.id}`, {
+                method: 'DELETE',
+            });
+
+            if (!response.ok) {
+                throw new Error('Ada kesalahan dalam proses hapus data');
+            }
+
+            const result = await response.json();
+            console.log('Data berhasil dihapus:', result);
+            fetchData();
+            console.log("Data jadwal yang dihapus:", selectedJadwal);
+            setOpenDelete(false);
+        } catch (err) {
+            console.error(err);
+        }
     };
 
     const handleChange = (e) => {
@@ -322,11 +410,25 @@ function JadwalPilmapres() {
                                         </TableRow>
                                     </TableHead>
                                     <TableBody>
-                                        {jadwal.map((row, index) => (
-                                            <TableRow key={row.no}  sx={{ backgroundColor: index % 2 === 0 ? '#E8F0FE' : '#ffffff'}}>
-                                                <TableCell>{row.no}</TableCell>
-                                                <TableCell>{row.tanggal}</TableCell>
-                                                <TableCell>{row.agenda}</TableCell>
+                                        {dataJadwal && dataJadwal.map((row, index) => (
+                                            <TableRow key={index}  sx={{ backgroundColor: index % 2 === 0 ? '#E8F0FE' : '#ffffff'}}>
+                                                <TableCell>{index+1}</TableCell>
+                                                <TableCell>
+                                                    {new Date(row.tanggal_mulai).toLocaleDateString('id-ID', {
+                                                        day: 'numeric',
+                                                        month: 'long',
+                                                        year: 'numeric',
+                                                    })}{" "}
+                                                     -{" "}  
+                                                    {new Date(row.tanggal_berakhir).toLocaleDateString('id-ID', {
+                                                        day: 'numeric',
+                                                        month: 'long',
+                                                        year: 'numeric',
+                                                    })
+
+                                                    }
+                                                </TableCell>
+                                                <TableCell>{row.acara}</TableCell>
                                                 <TableCell>
                                                     <IconButton color='primary' onClick={() => handleEditClick(row)}>
                                                         <EditIcon/>
@@ -349,23 +451,32 @@ function JadwalPilmapres() {
                     Edit Jadwal
                 </DialogTitle>
                 <DialogContent>
-                    <InputLabel sx={{ color:'white' }} >Tanggal</InputLabel>
-                    <TextField 
+                    <InputLabel sx={{ color:'white' }} >Tanggal Mulai</InputLabel>
+                    <DatePicker
                         margin="dense"
-                        type="date"
-                        fullWidth
-                        name="tanggal"
-                        value={editedJadwal.tanggal}
-                        onChange={handleChange}
-                        sx={{ backgroundColor: '#FFFFFF', borderRadius: '4px' }}
+                        name="tanggal_mulai"
+                        format='YYYY-MM-DD'
+                        value={dayjs(editedJadwal.tanggal_mulai)}
+                        onChange={(date) => {setEditedJadwal((prevState) => ({...prevState, tanggal_mulai: dayjs(date).format('YYYY-MM-DD')}))
+                        }}
+                        sx={{ backgroundColor: '#FFFFFF', borderRadius: '4px', width: "100%" }}/>
+                    <InputLabel sx={{ color:'white' }} >Tanggal Berakhir</InputLabel>
+                    <DatePicker 
+                        margin="dense"
+                        name="tanggal_berakhir"
+                        format='YYYY-MM-DD'
+                        value={dayjs(editedJadwal.tanggal_berakhir)}
+                        onChange={(date) => {setEditedJadwal((prevState) => ({...prevState, tanggal_berakhir: dayjs(date).format('YYYY-MM-DD')}))
+                    }}
+                        sx={{ backgroundColor: '#FFFFFF', borderRadius: '4px', width: "100%" }}
                     />
                     <InputLabel sx={{ color:'white' }} >Agenda</InputLabel>
                     <TextField 
                         margin="dense"
                         type="text"
                         fullWidth
-                        name="agenda"
-                        value={editedJadwal.agenda}
+                        name="acara"
+                        value={editedJadwal.acara}
                         onChange={handleChange}
                         sx={{ backgroundColor: '#FFFFFF', borderRadius: '4px' }}
                     />
@@ -388,23 +499,31 @@ function JadwalPilmapres() {
             <Dialog open={openTambah} onClose={() => setOpenTambah(false)} sx={{ '& .MuiDialog-paper': { backgroundColor: '#003366', borderRadius: '8px', color: 'white', width: '100%' } }}>
                 <DialogTitle>Tambah Jadwal</DialogTitle>
                 <DialogContent>
-                    <InputLabel sx={{ color:'white' }} >Tanggal</InputLabel>
-                    <TextField 
+                    <InputLabel sx={{ color:'white' }} >Tanggal Mulai</InputLabel>
+                    <DatePicker
                         margin="dense"
-                        type="date"
-                        fullWidth
-                        name="tanggal"
-                        value={newJadwal.tanggal}
-                        onChange={handleChangeTambah}
-                        sx={{ backgroundColor: '#FFFFFF', borderRadius: '4px' }}
+                        name="tanggal_mulai"
+                        value={dayjs(newJadwal.tanggal_mulai)}
+                        onChange={(date) => {setNewJadwal((prevState) => ({...prevState, tanggal_mulai: dayjs(date).format('YYYY-MM-DD')}))
+                        }}
+                        sx={{ backgroundColor: '#FFFFFF', borderRadius: '4px', width: "100%" }}
+                        />
+                    <InputLabel sx={{ color:'white' }} >Tanggal Berakhir</InputLabel>
+                    <DatePicker
+                        margin="dense"
+                        name="tanggal_berakhir"
+                        value={dayjs(newJadwal.tanggal_berakhir)}
+                        onChange={(date) => {setNewJadwal((prevState) => ({...prevState, tanggal_berakhir: dayjs(date).format('YYYY-MM-DD')}))
+                        }}
+                        sx={{ backgroundColor: '#FFFFFF', borderRadius: '4px', width: "100%" }}
                     />
                     <InputLabel sx={{ color:'white' }} >Agenda</InputLabel>
                     <TextField 
                         margin="dense"
                         type="text"
                         fullWidth
-                        name="agenda"
-                        value={newJadwal.agenda}
+                        name="acara"
+                        value={newJadwal.acara}
                         onChange={handleChangeTambah}
                         sx={{ backgroundColor: '#FFFFFF', borderRadius: '4px' }}
                     />

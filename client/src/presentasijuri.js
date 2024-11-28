@@ -11,6 +11,7 @@ import { useNavigate } from 'react-router-dom';
 
 function PresentasiJuri() {
     const [openDialog, setOpenDialog] = useState(false);
+    const [setSelectedPeserta] = useState(null);
     const [anchorEl, setAnchorEl] = useState(null);
     const [dataPresentasi, setDataPresentasi] = useState([]);
     const navigate = useNavigate(); 
@@ -20,7 +21,7 @@ function PresentasiJuri() {
     }, []);
     const fetchData = async () => {
         try {
-            const response = await fetch('http://localhost:5000/jadwalpresensi',{
+            const response = await fetch('http://localhost:5000/jadwalpresentasi',{
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -44,11 +45,13 @@ function PresentasiJuri() {
     });
 
     const handleInfoClick = (peserta) => {
+        setSelectedPeserta(peserta);
         setOpenDialog(true);
     };
     
     const handleCloseDialog = () => {
         setOpenDialog(false);
+        setSelectedPeserta(null);
     };
 
     const handleChange = (e) => {
