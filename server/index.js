@@ -16,6 +16,7 @@ const capaian = require("./routes/capaian");
 const migratePendaftaranRouter = require("./routes/migratePendaftaran");
 const inovatif = require("./routes/inovatif");
 const informasi = require("./routes/informasi");
+const peserta = require("./routes/peserta");
 
 const app = express();
 const PORT = 5000;
@@ -40,6 +41,7 @@ app.use("/migratePendaftaran", migratePendaftaranRouter);
 app.use("/capaian", capaian);
 app.use("/inovatif", inovatif);
 app.use("/informasi", informasi);
+app.use("/peserta", peserta);
 
 app.listen(PORT, () => {
   console.log(`Server berjalan di port ${PORT}`);

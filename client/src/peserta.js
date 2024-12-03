@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Box, Button, Typography, Grid, Paper, List, ListItem, ListItemIcon, ListItemText, MenuItem, IconButton, Menu,Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Dialog, DialogTitle, DialogContent, DialogActions } from '@mui/material';
 import HomeIcon from '@mui/icons-material/Home';
 import DescriptionIcon from '@mui/icons-material/Description';
@@ -8,15 +8,36 @@ import InfoIcon from '@mui/icons-material/Info';
 import  ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import Logo from './assets/images/logopilmapres.png';
 import { useNavigate } from 'react-router-dom';
+import dayjs from 'dayjs';
 
 function Peserta() {
     const [openDialog, setOpenDialog] = useState(false);
     const [selectedPeserta, setSelectedPeserta] = useState(null);
+    const [peserta, setPeserta] = useState(null);
+    const [loading, setLoading] = useState(false);
     const [anchorEl, setAnchorEl] = useState(null);
-    const navigate = useNavigate(); 
+    const navigate = useNavigate();
+
+    const fetchDetailPeserta = async (id) => {
+        setLoading(true);
+        try {
+          const response = await fetch(`http://localhost:5000/peserta/${id}`);
+          if (response.ok) {
+            const data = await response.json();
+            setSelectedPeserta(data);
+            setOpenDialog(true);
+          } else {
+            console.error("Gagal mengambil detail peserta:", await response.text());
+          }
+        } catch (err) {
+          console.error("Terjadi kesalahan saat mengambil detail peserta:", err);
+        } finally {
+          setLoading(false);
+        }
+      };
 
     const handleInfoClick = (peserta) => {
-        setSelectedPeserta(peserta);
+       fetchDetailPeserta(peserta.id);
         setOpenDialog(true);
     };
     
@@ -54,27 +75,21 @@ function Peserta() {
         }
       };
 
-      const peserta = [
-        {
-            id_pengguna: 1,
-            nim: "3312311005",
-            namaLengkap: "Muhammad Alfath Ramadhan",
-            prodi: "D3 Teknik Informatika",
-        },
-        {
-            id_pengguna: 2,
-            nim: "3312311102",
-            namaLengkap: "Sesa Febrius Trialaka",
-            prodi: "D3 Teknik Informatika",
-        },
-        {
-            id_pengguna: 3,
-            nim: "3312311006",
-            namaLengkap: "Nurafifah Yusdi",
-            prodi: "D4 Teknik Informatika",
-        },
-    ];
+      useEffect(() => {
+        const fetchPeserta = async () => {
+            try {
+                const response = await fetch('http://localhost:5000/peserta');
+                const data = await response.json();
+                console.log('Data peserta:', data); 
+                setPeserta(data);
+            } catch (err) {
+                console.error('Error fetching peserta:', err);
+            }
+        };
+            fetchPeserta();
+      }, []);
     
+
     return (
         <Box sx={{ display: 'flex'}}>
             <Box sx={{ 
@@ -198,14 +213,14 @@ function Peserta() {
                                         </TableRow>
                                     </TableHead>
                                     <TableBody>
-                                        {peserta.map((row, index) => (
-                                            <TableRow key={row.id_pengguna}  sx={{ backgroundColor: index % 2 === 0 ? '#E8F0FE' : '#ffffff'}}>
+                                        {peserta?.map((peserta, index) => (
+                                            <TableRow key={index}  sx={{ backgroundColor: index % 2 === 0 ? '#E8F0FE' : '#ffffff'}}>
                                                 <TableCell>{index + 1}</TableCell>
-                                                <TableCell>{row.nim}</TableCell>
-                                                <TableCell>{row.namaLengkap}</TableCell>
-                                                <TableCell>{row.prodi}</TableCell>
+                                                <TableCell>{peserta.nim}</TableCell>
+                                                <TableCell>{peserta.namaLengkap}</TableCell>
+                                                <TableCell>{peserta.prodi}</TableCell>
                                                 <TableCell>
-                                                    <IconButton onClick={() => handleInfoClick(row)}>
+                                                    <IconButton onClick={() => handleInfoClick(peserta)}>
                                                         <InfoIcon sx={{ color: '#003366' }} />
                                                     </IconButton>
                                                 </TableCell>
@@ -218,7 +233,7 @@ function Peserta() {
                     </Grid>
                 </Grid>
             </Box>
-            <Dialog open={openDialog} onClose={handleCloseDialog} sx={{ '& .MuiDialog-paper': { backgroundColor: '#003366', borderRadius: '8px', color: 'white', width: '100%', padding: 2, overflow: 'visible'} }}>
+            <Dialog open={openDialog} onClose={handleCloseDialog} sx={{ '& .MuiDialog-paper': { backgroundColor: '#003366', borderRadius: '8px', color: 'white', width: '100%', padding: 2} }}>
                 <DialogTitle sx={{ textAlign: 'center', fontWeight: 'bold', fontSize: '1.5rem', padding: 1}} >Data Peserta</DialogTitle>
                 <DialogContent sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', padding: 0 }} >
                     <Paper 
@@ -235,13 +250,29 @@ function Peserta() {
                     >
                         {selectedPeserta && (
                             <>
+                                <Box sx={{ marginBottom: 2 }} >
+                                    <img
+                                        src={`http://localhost:5000/uploads/foto/${selectedPeserta.foto}` }
+                                        alt="Foto Peserta"
+                                        style={{
+                                            width: '200px',
+                                            height: '200px',
+                                            borderRadius: '50%',
+                                            objectFit: 'cover',
+                                            border: '3px solid #1E376D',
+                                            marginTop: '300px',
+                                        }}
+                                    />
+                                </Box>
                                 {[
                                     { label: 'Nama', value: selectedPeserta.namaLengkap },
                                     { label: 'NIM', value: selectedPeserta.nim },
-                                    { label: 'Tempat, Tanggal Lahir', value: selectedPeserta.ttl },
+                                    { label: 'Tempat, Tanggal Lahir', value: `${selectedPeserta.tempat}, ${dayjs(selectedPeserta.tanggalLahir).format('DD MMMM YYYY')}` },
+                                    { label: 'Jenis Kelamin', value: selectedPeserta.jenisKelamin},
                                     { label: 'No. HP', value: selectedPeserta.noHp },
                                     { label: 'Alamat E-mail', value: selectedPeserta.email },
                                     { label: 'Program Studi', value: selectedPeserta.prodi },
+                                    { label: 'Program Pendidikan', value: selectedPeserta.programPendidikan}
                                 ].map((item, index) => (
                                     <Box 
                                         key={index}

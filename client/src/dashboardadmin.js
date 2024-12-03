@@ -252,7 +252,7 @@ function DashboardAdmin() {
                                     <Paper sx={{ padding: 2, textAlign: 'center', backgroundColor: '#1E376D' }}>
                                         <PeopleIcon sx={{ fontSize: 40, color: '#FFFFFF' }} />
                                         <Typography variant="h6" sx={{ color: '#FFFFFF' }}>
-                                            Pengguna Aktif
+                                            Pengguna
                                         </Typography>
                                         <Typography variant="subtitle1" sx={{ color: '#FFFFFF'}}>50</Typography>
                                     </Paper>
@@ -261,7 +261,7 @@ function DashboardAdmin() {
                                     <Paper sx={{ padding: 2, textAlign: 'center', backgroundColor: '#1E376D' }}>
                                         <InsertDriveFileIcon sx={{ fontSize: 40, color: '#FFFFFF' }} />
                                         <Typography variant="h6" sx={{ color: '#FFFFFF' }}>
-                                            Total Berkas
+                                            Berkas
                                         </Typography>
                                         <Typography variant="subtitle1" sx={{ color: '#FFFFFF'}} >200</Typography>
                                     </Paper>

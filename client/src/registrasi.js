@@ -103,30 +103,45 @@ function Registrasi() {
     if (Object.keys(validationErrors).length > 0) {
         setErrors(validationErrors);
         console.log("Validation errors:", validationErrors);
-    } else {
-        console.log("Form data being sent:", formData);  // <-- Debug line
-        try {
-            const response = await fetch('http://localhost:5000/registrasi', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(formData),
-            });
+        return;
+    }
 
-            const result = await response.json();
-            console.log("Response result:", result);  // <-- Debug line
-
-            if (response.ok) {
-                alert(result.message);
-                navigate('/login');
-            } else {
-                alert(result.error);
-                console.error('Error:', result.error);  // <-- Debug error line
+    // Create FormData to handle multipart/form-data
+    const formDataToSend = new FormData();
+    
+    // Append all form fields to FormData
+    Object.keys(formData).forEach(key => {
+        if (key === 'foto') {
+            // Handle file upload separately
+            const fileInput = document.querySelector('input[name="foto"]');
+            if (fileInput.files.length > 0) {
+                formDataToSend.append('foto', fileInput.files[0]);
             }
-        } catch (error) {
-            console.error('Error:', error);  // <-- Debug error line
+        } else {
+            formDataToSend.append(key, formData[key]);
         }
+    });
+
+    try {
+        const response = await fetch('http://localhost:5000/registrasi', {
+            method: 'POST',
+            body: formDataToSend,
+            // Note: Do NOT set Content-Type header when sending FormData
+            // The browser will automatically set the correct multipart/form-data boundary
+        });
+
+        const result = await response.json();
+        console.log("Response result:", result);
+
+        if (response.ok) {
+            alert(result.message);
+            navigate('/login');
+        } else {
+            alert(result.error);
+            console.error('Error:', result.error);
+        }
+    } catch (error) {
+        console.error('Error:', error);
     }
 };
 
