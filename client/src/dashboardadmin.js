@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Box, Button, Typography, Grid, Paper, List, ListItem, ListItemIcon, ListItemText, Collapse, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, MenuItem, IconButton, Menu } from '@mui/material';
 import HomeIcon from '@mui/icons-material/Home';
 import DescriptionIcon from '@mui/icons-material/Description';
@@ -10,7 +10,8 @@ import InfoIcon from '@mui/icons-material/Info';
 import EventIcon from '@mui/icons-material/Event'; 
 import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
-import  ExitToAppIcon from '@mui/icons-material/ExitToApp';
+import ExitToAppIcon from '@mui/icons-material/ExitToApp';
+import MilitaryTechRoundedIcon from "@mui/icons-material/MilitaryTechRounded";
 import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
 import Logo from './assets/images/logopilmapres.png';
 import { useNavigate } from 'react-router-dom';
@@ -18,25 +19,48 @@ import { useNavigate } from 'react-router-dom';
 function DashboardAdmin() {
     const [openLaman, setOpenLaman] = useState(false);
     const [anchorEl, setAnchorEl] = useState(null);
+    const [data, setData] = useState({ pengguna: 0, capaian: 0, capaianTerbaru: [] });
     const navigate = useNavigate(); 
-
+    useEffect(() => {
+        fetchData();
+    }, []);
     const handleToggleLaman = () => {
         setOpenLaman(!openLaman);
     };
 
-    const rows = [
-        { no: 1, idBerkas: '001', namaBerkas: 'Olimpiade Nasional', jenis: 'CU', status: 'Disetujui' },
-        { no: 2, idBerkas: '002', namaBerkas: 'Olimpiade Matematika', jenis: 'CU', status: 'Menunggu' },
-        { no: 3, idBerkas: '003', namaBerkas: 'Pencak Silat Provinsi', jenis: 'CU', status: 'Ditolak' },
-        { no: 4, idBerkas: '004', namaBerkas: 'Gelang Bambu Muda', jenis: 'CU', status: 'Disetujui' },
-    ];
+        const fetchData = async () => {
+        try {
+            const [dataPengguna, dataCapaian, dataCapaianTerbaru] = await Promise.all([
+                fetchJson('http://localhost:5000/dashboard/count/pengguna'),
+                fetchJson('http://localhost:5000/dashboard/count/capaian'),
+                fetchJson('http://localhost:5000/dashboard/capaian')
+            ]);
+    
+            setData({
+                pengguna: dataPengguna.total,
+                capaian: dataCapaian.total,
+                capaianTerbaru: dataCapaianTerbaru
+            });
+        } catch (err) {
+            console.error('Error fetching data:', err);
+        }
+    };
+    
+    const fetchJson = async (url) => {
+        const response = await fetch(url);
+        if (!response.ok) {
+            throw new Error(`Failed to fetch data from ${url}`);
+        }
+        return response.json();
+    };
+
     const getStatusColor = (status) => {
         switch (status) {
-            case 'Disetujui':
+            case 'disetujui':
                 return '#4CAF50'; 
-            case 'Menunggu':
+            case 'menunggu':
                 return '#FFC107'; 
-            case 'Ditolak':
+            case 'ditolak':
                 return '#F44336'; 
             default:
                 return '#000'; 
@@ -153,6 +177,22 @@ function DashboardAdmin() {
                             </Button>
                         </ListItem>
                         <ListItem sx={{ marginBottom: '10px', }}>
+                        <Button 
+                                fullWidth
+                                onClick={() => navigate('/nilaiadmin')}
+                                sx={{ 
+                                    color: '#1E376D', 
+                                    '&:hover': { 
+                                        backgroundColor: '#E0E0E0',
+                                        color: '#003366',
+                                    }, 
+                                }}
+                            >
+                                <ListItemIcon sx={{ color: '#1E376D' }}><MilitaryTechRoundedIcon /></ListItemIcon>
+                                <ListItemText primary="Nilai" primaryTypographyProps={{ style: { color: '#1E376D' } }} />
+                            </Button>
+                        </ListItem>
+                        <ListItem sx={{ marginBottom: '10px', }}>
                             <Button 
                                 fullWidth
                                 onClick={handleToggleLaman} 
@@ -254,7 +294,7 @@ function DashboardAdmin() {
                                         <Typography variant="h6" sx={{ color: '#FFFFFF' }}>
                                             Pengguna
                                         </Typography>
-                                        <Typography variant="subtitle1" sx={{ color: '#FFFFFF'}}>50</Typography>
+                                        <Typography variant="subtitle1" sx={{ color: '#FFFFFF'}}>{data?.pengguna}</Typography>
                                     </Paper>
                                 </Grid>
                                 <Grid item xs={6}>
@@ -263,7 +303,7 @@ function DashboardAdmin() {
                                         <Typography variant="h6" sx={{ color: '#FFFFFF' }}>
                                             Berkas
                                         </Typography>
-                                        <Typography variant="subtitle1" sx={{ color: '#FFFFFF'}} >200</Typography>
+                                        <Typography variant="subtitle1" sx={{ color: '#FFFFFF'}} >{data?.capaian}</Typography>
                                     </Paper>
                                 </Grid>
                             </Grid>
@@ -282,12 +322,12 @@ function DashboardAdmin() {
                                         </TableRow>
                                     </TableHead>
                                     <TableBody>
-                                        {rows.map((row, index) => (
-                                            <TableRow key={row.no} sx={{ backgroundColor: index % 2 === 0 ? '#E8F0FE' : '#ffffff'}}>
-                                                <TableCell>{row.no}</TableCell>
-                                                <TableCell>{row.idBerkas}</TableCell>
-                                                <TableCell>{row.namaBerkas}</TableCell>
-                                                <TableCell>{row.jenis}</TableCell>
+                                        {data?.capaianTerbaru?.map((row, index) => (
+                                            <TableRow key={row.id} sx={{ backgroundColor: index % 2 === 0 ? '#E8F0FE' : '#ffffff'}}>
+                                                <TableCell>{index+1}</TableCell>
+                                                <TableCell>{row.id}</TableCell>
+                                                <TableCell>{row.nama_berkas}</TableCell>
+                                                <TableCell>CU</TableCell>
                                                 <TableCell sx={{ color: getStatusColor(row.status), fontWeight: 'bold' }}>{row.status}</TableCell>
                                             </TableRow>
                                         ))}
