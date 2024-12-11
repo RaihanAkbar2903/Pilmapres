@@ -91,13 +91,13 @@ router.put("/:id/status", (req, res) => {
   });
 });
 
-router.post("/upload", (req, res) => {
+router.post("/upload",async (req, res) => {
   const token = req.headers["authorization"];
   if (!token) {
     return res.status(401).json({ error: "Token tidak ditemukan" });
   }
 
-  jwt.verify(token.replace("Bearer ", ""), "mySuperSecretKey", (err, user) => {
+  jwt.verify(token.replace("Bearer ", ""), "mySuperSecretKey",async (err, user) => {
     if (err) {
       return res.status(403).json({ error: "Token tidak valid" });
     }
@@ -112,9 +112,13 @@ router.post("/upload", (req, res) => {
     if (file.mimetype !== "application/pdf") {
       return res.status(400).json({ error: "File harus berformat PDF" });
     }
-    console.log(user);
     
     const id = user.id_pendaftaran;
+    
+    const [cekUpload] = await db.promise().query("SELECT * FROM capaian WHERE id_pendaftaran = ?", [id]);
+
+    if (cekUpload.length >= 10) return res.status(400).json({ error: "Maksimal upload 10 capaian" });
+
     const randomName = crypto.randomBytes(9).toString("hex");
     const namaBerkas = `${randomName}-${file.name}`;
     const query =

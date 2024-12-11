@@ -7,11 +7,11 @@ import PresentToAllIcon from '@mui/icons-material/PresentToAll';
 import UploadFileIcon from '@mui/icons-material/UploadFile';
 import  ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import Logo from './assets/images/logopilmapres.png';
-import { useNavigate } from 'react-router-dom';
+import { Await, useNavigate } from 'react-router-dom';
 
 function PresentasiJuri() {
     const [openDialog, setOpenDialog] = useState(false);
-    const [setSelectedPeserta] = useState(null);
+    const [selectedPeserta, setSelectedPeserta] = useState(null);
     const [anchorEl, setAnchorEl] = useState(null);
     const [dataPresentasi, setDataPresentasi] = useState([]);
     const navigate = useNavigate(); 
@@ -37,14 +37,43 @@ function PresentasiJuri() {
         }
     };
     const [formValues, setFormValues] = useState({
-        content: '',
-        accuracy: '',
-        fluency: '',
-        pronounciation: '',
-        performance : '',
+      content: "",
+      accuracy: "",
+      fluency: "",
+      pronounciation: "",
+      overall_performance: "",
     });
 
-    const handleInfoClick = (peserta) => {
+    const handleInfoClick = async (peserta) => {
+        try {
+            setFormValues({
+                content: "",
+                accuracy: "",
+                fluency: "",
+                pronounciation: "",
+                overall_performance: "",
+            });
+            const response = await fetch(`http://localhost:5000/jadwalpresentasi/${peserta.id}`);
+            
+            if (!response.ok) {
+                throw new Error('Gagal mengambil data');
+            }
+            const data = await response.json();
+            console.log('Data jadwal:', data);
+            
+            const newFormat = {
+              content: data.nilai.content?.skor || null,
+              accuracy: data.nilai.accuracy?.skor || null,
+              fluency: data.nilai.fluency?.skor || null,
+              pronounciation: data.nilai.pronounciation?.skor || null,
+              overall_performance: data.nilai.overall_performance?.skor || null,
+            };
+            setFormValues(newFormat);
+            console.log('formValues:', newFormat);
+            
+        } catch (error) {
+            console.error('Gagal mengambil data:', error);
+        }
         setSelectedPeserta(peserta);
         setOpenDialog(true);
     };
@@ -63,6 +92,23 @@ function PresentasiJuri() {
     };
 
     const handleSubmit = () => {
+        try {
+            const response = fetch(`http://localhost:5000/jadwalpresentasi/${selectedPeserta.id}/nilai`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(formValues),
+            });
+
+            if (!response.ok) {
+                throw new Error('Gagal mengirim data');
+            }
+            alert('Data berhasil disimpan');
+            fetchData();
+        } catch (error) {
+            console.error('Gagal mengirim data:', error);
+        }
         console.log('Submitted Data:', formValues);
         handleCloseDialog();
     }
@@ -253,23 +299,28 @@ function PresentasiJuri() {
                         backgroundColor: '#FFFFFF' 
                         }}
                     >
-                        {['Content', 'Accuracy', 'Fluency', 'Pronunciation', 'Overall Performance'].map((label) => (
-                            <TextField
-                                key={label}
-                                name={label.toLowerCase().replace(/\s/g, '')}
-                                label={label}
-                                variant="outlined"
-                                fullWidth
-                                value={formValues[label.toLowerCase().replace(/\s/g, '')]}
-                                onChange={handleChange}
-                                sx={{
-                                    marginBottom: 1,
-                                    '& .MuiInputBase-root': { backgroundColor: '#FFFFFF', borderRadius: 2 },
-                                    '& .MuiFormLabel-root': { color: '#003366' },
-                                    '& .MuiInputBase-input': { color: '#000000' },
-                                }}
-                            />
-                        ))}
+                        {['Content', 'Accuracy', 'Fluency', 'Pronounciation', 'Overall Performance'].map((label) => {
+                            let name = label.replace(/\s/g, '_').toLowerCase();
+                            let value = formValues[name];
+                            return (
+                                <TextField
+                                    key={label}
+                                    name={name}
+                                    label={label}
+                                    variant="outlined"
+                                    fullWidth
+                                    value={value}
+                                    onChange={handleChange}
+                                    type='number'
+                                    sx={{
+                                        marginBottom: 1,
+                                        '& .MuiInputBase-root': { backgroundColor: '#FFFFFF', borderRadius: 2 },
+                                        '& .MuiFormLabel-root': { color: '#003366' },
+                                        '& .MuiInputBase-input': { color: '#000000' },
+                                    }}
+                                />
+                            );
+                        })}
                     </Paper>
                 </DialogContent>
                 <DialogActions sx={{ justifyContent: 'flexend', marginTop: 1, paddingX: 3, paddingBottom: 1 }}>
