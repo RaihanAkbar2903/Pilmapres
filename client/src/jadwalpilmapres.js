@@ -11,6 +11,7 @@ import EventIcon from '@mui/icons-material/Event';
 import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
 import EditIcon from '@mui/icons-material/Edit';
+import MilitaryTechRoundedIcon from "@mui/icons-material/MilitaryTechRounded";
 import  ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import DeleteIcon from '@mui/icons-material/Delete';
 import Logo from './assets/images/logopilmapres.png';
@@ -290,6 +291,22 @@ function JadwalPilmapres() {
                             >
                                 <ListItemIcon sx={{ color: '#1E376D' }}><PresentToAllIcon /></ListItemIcon>
                                 <ListItemText primary="Presentasi" primaryTypographyProps={{ style: { color: '#1E376D' } }} />
+                            </Button>
+                        </ListItem>
+                        <ListItem sx={{ marginBottom: '10px', }}>
+                        <Button 
+                                fullWidth
+                                onClick={() => navigate('/nilaiadmin')}
+                                sx={{ 
+                                    color: '#1E376D', 
+                                    '&:hover': { 
+                                        backgroundColor: '#E0E0E0',
+                                        color: '#003366',
+                                    }, 
+                                }}
+                            >
+                                <ListItemIcon sx={{ color: '#1E376D' }}><MilitaryTechRoundedIcon /></ListItemIcon>
+                                <ListItemText primary="Nilai" primaryTypographyProps={{ style: { color: '#1E376D' } }} />
                             </Button>
                         </ListItem>
                         <ListItem sx={{ marginBottom: '10px', }}>

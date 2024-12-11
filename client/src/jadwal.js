@@ -18,6 +18,7 @@ import {
   MenuItem,
   Menu,
   IconButton,
+  TableHead,
 } from "@mui/material";
 import HomeIcon from "@mui/icons-material/Home";
 import DescriptionIcon from "@mui/icons-material/Description";
@@ -367,7 +368,7 @@ function Jadwal() {
                               month: "long",
                               year: "numeric",
                             })
-                          : "Loading..."}
+                          : null}
                       </TableCell>
                     </TableRow>
                     <TableRow>

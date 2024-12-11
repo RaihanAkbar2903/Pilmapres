@@ -42,6 +42,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import ExitToAppIcon from "@mui/icons-material/ExitToApp";
 import DeleteIcon from "@mui/icons-material/Delete";
 import Logo from "./assets/images/logopilmapres.png";
+import MilitaryTechRoundedIcon from "@mui/icons-material/MilitaryTechRounded";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import dayjs from "dayjs";
 import { useNavigate } from "react-router-dom";
@@ -87,11 +88,11 @@ function JadwalPresentasi() {
 
   const fetchJadwal = async () => {
     try {
-      const response = await fetch("http://localhost:5000/jadwalpresentasi",{
+      const response = await fetch("http://localhost:5000/jadwalpresentasi", {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${localStorage.getItem("token")}`,
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
       });
       if (response.ok) {
@@ -363,6 +364,27 @@ function JadwalPresentasi() {
             <ListItem sx={{ marginBottom: "10px" }}>
               <Button
                 fullWidth
+                onClick={() => navigate("/nilaiadmin")}
+                sx={{
+                  color: "#1E376D",
+                  "&:hover": {
+                    backgroundColor: "#E0E0E0",
+                    color: "#003366",
+                  },
+                }}
+              >
+                <ListItemIcon sx={{ color: "#1E376D" }}>
+                  <MilitaryTechRoundedIcon />
+                </ListItemIcon>
+                <ListItemText
+                  primary="Nilai"
+                  primaryTypographyProps={{ style: { color: "#1E376D" } }}
+                />
+              </Button>
+            </ListItem>
+            <ListItem sx={{ marginBottom: "10px" }}>
+              <Button
+                fullWidth
                 onClick={handleToggleLaman}
                 sx={{
                   color: "#1E376D",
@@ -619,7 +641,11 @@ function JadwalPresentasi() {
                 haritanggal: dayjs(newValue).format("YYYY-MM-DD"),
               }));
             }}
-            sx={{ backgroundColor: "#FFFFFF", borderRadius: "4px", width: "100%" }}
+            sx={{
+              backgroundColor: "#FFFFFF",
+              borderRadius: "4px",
+              width: "100%",
+            }}
           />
           <InputLabel sx={{ color: "white" }}>Tempat</InputLabel>
           <TextField
