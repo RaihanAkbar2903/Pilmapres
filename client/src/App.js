@@ -1,27 +1,29 @@
-import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Landing from './landingpage'
-import Login from './login';
-import DashboardMahasiswa from './dashboardmahasiswa';
-import BerkasCU from './berkascu';
-import BerkasPI from './berkaspi';
-import Jadwal from './jadwal';
-import Hasil from './hasil';
-import Registrasi from './registrasi';
-import DashboardAdmin from './dashboardadmin';
-import DataPengguna from './datapengguna';
-import BerkasAdminCU from './berkasadmincu';
-import JadwalPresentasi from './jadwalpresentasi';
-import Banner from './banner';
-import Informasi from './informasi';
-import JadwalPilmapres from './jadwalpilmapres';
-import ProtectedRoute from './ProtectedRoute';
-import DashboardJuri from './dashboardjuri';
-import Peserta from './peserta';
-import BerkasJuri from './berkasjuri';
-import PresentasiJuri from './presentasijuri';
+import React from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Landing from "./landingpage";
+import Login from "./login";
+import DashboardMahasiswa from "./dashboardmahasiswa";
+import BerkasCU from "./berkascu";
+import BerkasPI from "./berkaspi";
+import Jadwal from "./jadwal";
+import Hasil from "./hasil";
+import Registrasi from "./registrasi";
+import DashboardAdmin from "./dashboardadmin";
+import DataPengguna from "./datapengguna";
+import BerkasAdminCU from "./berkasadmincu";
+import JadwalPresentasi from "./jadwalpresentasi";
+import Banner from "./banner";
+import Informasi from "./informasi";
+import JadwalPilmapres from "./jadwalpilmapres";
+import ProtectedRoute from "./ProtectedRoute";
+import DashboardJuri from "./dashboardjuri";
+import Peserta from "./peserta";
+import BerkasJuri from "./berkasjuri";
+import PresentasiJuri from "./presentasijuri";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import NilaiAdmin from "./nilaiadmin";
+import NilaiAdminDetail from "./nilaiadmindetail";
 
 function App() {
   return (
@@ -53,6 +55,11 @@ function App() {
             <Route
               path="/jadwalpresentasi"
               element={<JadwalPresentasi />}
+            ></Route>
+            <Route path="/nilaiadmin" element={<NilaiAdmin />}></Route>
+            <Route
+              path="/nilaiadmin/:id"
+              element={<NilaiAdminDetail />}
             ></Route>
             <Route path="/dashboardjuri" element={<DashboardJuri />}></Route>
             <Route path="/peserta" element={<Peserta />}></Route>
