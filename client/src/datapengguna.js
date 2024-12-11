@@ -14,6 +14,7 @@ import ExpandMore from '@mui/icons-material/ExpandMore';
 import EditIcon from '@mui/icons-material/Edit';
 import  ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import DeleteIcon from '@mui/icons-material/Delete';
+import MilitaryTechRoundedIcon from "@mui/icons-material/MilitaryTechRounded";
 import Logo from './assets/images/logopilmapres.png';
 import { useNavigate } from 'react-router-dom';
 
@@ -228,6 +229,22 @@ const handleAddUser = async () => {
                             >
                                 <ListItemIcon sx={{ color: '#1E376D' }}><PresentToAllIcon /></ListItemIcon>
                                 <ListItemText primary="Presentasi" primaryTypographyProps={{ style: { color: '#1E376D' } }} />
+                            </Button>
+                        </ListItem>
+                        <ListItem sx={{ marginBottom: '10px', }}>
+                        <Button 
+                                fullWidth
+                                onClick={() => navigate('/nilaiadmin')}
+                                sx={{ 
+                                    color: '#1E376D', 
+                                    '&:hover': { 
+                                        backgroundColor: '#E0E0E0',
+                                        color: '#003366',
+                                    }, 
+                                }}
+                            >
+                                <ListItemIcon sx={{ color: '#1E376D' }}><MilitaryTechRoundedIcon /></ListItemIcon>
+                                <ListItemText primary="Nilai" primaryTypographyProps={{ style: { color: '#1E376D' } }} />
                             </Button>
                         </ListItem>
                         <ListItem sx={{ marginBottom: '10px', }}>

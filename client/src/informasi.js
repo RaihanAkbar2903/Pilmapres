@@ -13,6 +13,7 @@ import ExpandMore from '@mui/icons-material/ExpandMore';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import Logo from './assets/images/logopilmapres.png';
 import { useNavigate } from 'react-router-dom';
+import MilitaryTechRoundedIcon from "@mui/icons-material/MilitaryTechRounded";
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 
@@ -174,6 +175,22 @@ function Informasi() {
                             >
                                 <ListItemIcon sx={{ color: '#1E376D' }}><PresentToAllIcon /></ListItemIcon>
                                 <ListItemText primary="Presentasi" primaryTypographyProps={{ style: { color: '#1E376D' } }} />
+                            </Button>
+                        </ListItem>
+                        <ListItem sx={{ marginBottom: '10px', }}>
+                        <Button 
+                                fullWidth
+                                onClick={() => navigate('/nilaiadmin')}
+                                sx={{ 
+                                    color: '#1E376D', 
+                                    '&:hover': { 
+                                        backgroundColor: '#E0E0E0',
+                                        color: '#003366',
+                                    }, 
+                                }}
+                            >
+                                <ListItemIcon sx={{ color: '#1E376D' }}><MilitaryTechRoundedIcon /></ListItemIcon>
+                                <ListItemText primary="Nilai" primaryTypographyProps={{ style: { color: '#1E376D' } }} />
                             </Button>
                         </ListItem>
                         <ListItem sx={{ marginBottom: '10px', }}>
