@@ -31,6 +31,7 @@ function App() {
       <Router>
         <Routes>
           <Route path="/" element={<Landing />}></Route>
+          <Route path="/landingpage" element={<Landing />}></Route>
           <Route path="/login" element={<Login />}></Route>
           <Route path="/registrasi" element={<Registrasi />}></Route>
 

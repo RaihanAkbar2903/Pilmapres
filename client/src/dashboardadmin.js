@@ -78,20 +78,20 @@ function DashboardAdmin() {
     const handleLogout = async () => {
         try {
           // Panggil endpoint logout (opsional)
-          await fetch('http://localhost:5000/logout', {
-            method: 'POST',
+          await fetch("http://localhost:5000/logout", {
+            method: "POST",
             headers: {
-              'Content-Type': 'application/json',
+              "Content-Type": "application/json",
             },
           });
     
           // Hapus token dari localStorage
-          localStorage.removeItem('token');
+          localStorage.removeItem("token");
     
           // Redirect ke halaman login
-          navigate('/login');
+          navigate("/landingpage");
         } catch (err) {
-          console.error('Logout gagal:', err);
+          console.error("Logout gagal:", err);
         }
       };
     return (
@@ -315,7 +315,6 @@ function DashboardAdmin() {
                                     <TableHead sx={{ backgroundColor: '#1E376D' }}>
                                         <TableRow >
                                             <TableCell sx={{ color: '#FFFFFF'}}>No</TableCell>
-                                            <TableCell sx={{ color: '#FFFFFF'}}>ID Berkas</TableCell>
                                             <TableCell sx={{ color: '#FFFFFF'}}>Nama Berkas</TableCell>
                                             <TableCell sx={{ color: '#FFFFFF'}}>Jenis</TableCell>
                                             <TableCell sx={{ color: '#FFFFFF'}}>Status</TableCell>
@@ -325,7 +324,6 @@ function DashboardAdmin() {
                                         {data?.capaianTerbaru?.map((row, index) => (
                                             <TableRow key={row.id} sx={{ backgroundColor: index % 2 === 0 ? '#E8F0FE' : '#ffffff'}}>
                                                 <TableCell>{index+1}</TableCell>
-                                                <TableCell>{row.id}</TableCell>
                                                 <TableCell>{row.nama_berkas}</TableCell>
                                                 <TableCell>CU</TableCell>
                                                 <TableCell sx={{ color: getStatusColor(row.status), fontWeight: 'bold' }}>{row.status}</TableCell>

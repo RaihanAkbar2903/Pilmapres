@@ -113,7 +113,7 @@ function BerkasAdminCU() {
 
   const handleLogout = async () => {
     try {
-      
+      // Panggil endpoint logout (opsional)
       await fetch("http://localhost:5000/logout", {
         method: "POST",
         headers: {
@@ -121,11 +121,11 @@ function BerkasAdminCU() {
         },
       });
 
-  
+      // Hapus token dari localStorage
       localStorage.removeItem("token");
 
-      
-      navigate("/login");
+      // Redirect ke halaman login
+      navigate("/landingpage");
     } catch (err) {
       console.error("Logout gagal:", err);
     }

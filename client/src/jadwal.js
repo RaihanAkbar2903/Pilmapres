@@ -82,7 +82,7 @@ function Jadwal() {
       localStorage.removeItem("token");
 
       // Redirect ke halaman login
-      navigate("/login");
+      navigate("/landingpage");
     } catch (err) {
       console.error("Logout gagal:", err);
     }

@@ -89,20 +89,20 @@ function BerkasPI() {
     const handleLogout = async () => {
         try {
           // Panggil endpoint logout (opsional)
-          await fetch('http://localhost:5000/logout', {
-            method: 'POST',
+          await fetch("http://localhost:5000/logout", {
+            method: "POST",
             headers: {
-              'Content-Type': 'application/json',
+              "Content-Type": "application/json",
             },
           });
     
           // Hapus token dari localStorage
-          localStorage.removeItem('token');
+          localStorage.removeItem("token");
     
           // Redirect ke halaman login
-          navigate('/login');
+          navigate("/landingpage");
         } catch (err) {
-          console.error('Logout gagal:', err);
+          console.error("Logout gagal:", err);
         }
       };
 

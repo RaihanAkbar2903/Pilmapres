@@ -26,7 +26,7 @@ router.get("/", (req, res) => {
       });
     } else {
       // buat query untuk mengambil semua capaian yang relasinya dengan pendaftaran
-      const query = "SELECT capaian.id, namaLengkap, nama_berkas, kategori, wujud_capaian, bidang, status FROM capaian INNER JOIN pendaftaran ON capaian.id_pendaftaran = pendaftaran.id";
+      const query = "SELECT capaian.id, namaLengkap, nama_berkas, kategori, wujud_capaian, bidang, status FROM capaian INNER JOIN pendaftaran ON capaian.id_pendaftaran = pendaftaran.id ORDER BY FIELD(status, 'menunggu', 'disetujui', 'ditolak')";
       db.query(query, (err, results) => {
         if (err) return res.status(500).json({ error: err });
         
