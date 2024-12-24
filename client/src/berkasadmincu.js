@@ -37,6 +37,7 @@ import EventIcon from "@mui/icons-material/Event";
 import ExpandLess from "@mui/icons-material/ExpandLess";
 import ExpandMore from "@mui/icons-material/ExpandMore";
 import ExitToAppIcon from "@mui/icons-material/ExitToApp";
+import MilitaryTechRoundedIcon from "@mui/icons-material/MilitaryTechRounded";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import Logo from "./assets/images/logopilmapres.png";
 import { useNavigate } from "react-router-dom";
@@ -297,6 +298,22 @@ function BerkasAdminCU() {
                   primary="Presentasi"
                   primaryTypographyProps={{ style: { color: "#1E376D" } }}
                 />
+              </Button>
+            </ListItem>
+            <ListItem sx={{ marginBottom: '10px', }}>
+              <Button 
+                  fullWidth
+                  onClick={() => navigate('/nilaiadmin')}
+                  sx={{ 
+                    color: '#1E376D', 
+                    '&:hover': { 
+                      backgroundColor: '#E0E0E0',
+                      color: '#003366',
+                      }, 
+                  }}
+              >
+                <ListItemIcon sx={{ color: '#1E376D' }}><MilitaryTechRoundedIcon /></ListItemIcon>
+                <ListItemText primary="Nilai" primaryTypographyProps={{ style: { color: '#1E376D' } }} />
               </Button>
             </ListItem>
             <ListItem sx={{ marginBottom: "10px" }}>

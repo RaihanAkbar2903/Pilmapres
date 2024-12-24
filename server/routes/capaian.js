@@ -55,6 +55,7 @@ router.get("/:id", (req, res) => {
       if (results.length === 0) {
         return res.status(404).json({ error: "Capaian tidak ditemukan" });
       }
+      results[0].nilai = JSON.parse(results[0].nilai);
       return res.status(200).json(results[0]);
     });
   });

@@ -13,7 +13,13 @@ import { useNavigate } from 'react-router-dom';
 
 function BerkasJuri() {
     const [openDialog, setOpenDialog] = useState(false);
-    const [dataDialog, setDataDialog] = useState({});
+    const [dataDialog, setDataDialog] = useState({
+        penyajian:["",""],
+        masalah:["","",""],
+        solusi:["","","","",""],
+        kualitas:["","",""],
+    });
+    const [selectedId, setSelectedId] = useState(null);
     const [berkas, setBerkas] = useState([]);
     const [search, setSearch] = useState("");
     const [filteredBerkas, setFilteredBerkas] = useState([]);
@@ -34,6 +40,8 @@ function BerkasJuri() {
     
       useEffect(() => {
         fetchBerkas();
+        console.log("Data dialoggg:", dataDialog.penyajian[0]);
+        
       }, []);
     
       useEffect(() => {
@@ -66,15 +74,80 @@ function BerkasJuri() {
           console.error("Gagal mengambil data berkas:", err);
         }
       };
+      const resetDataDialog = () => {
+        setDataDialog({
+            penyajian:["",""],
+            masalah:["","",""],
+            solusi:["","","","",""],
+            kualitas:["","",""],
+        });
+        };
+    const handleChage = (e) => {
+        const { name, value } = e.target;
+        const [category, index] = name.split(".");
+        setDataDialog((prevState) => {
+          const updatedCategory = [...prevState[category]];
+          updatedCategory[index] = value;
+          return { ...prevState, [category]: updatedCategory };
+        });
+        console.log(dataDialog);
+    };
 
-    const handleOpenDialog = (id) => {
+    const handleOpenDialog =async (id) => {
+        try {
+            const response = await fetch(`http://localhost:5000/inovatif/${id}`, {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${localStorage.getItem("token")}`,
+                },
+            });
+
+            if (!response.ok) {
+                throw new Error("Gagal mengambil data nilai");
+            }
+
+            const data = await response.json();
+            const nilai = data.nilai;
+
+            setDataDialog({
+                penyajian: [nilai.penyajian1?.skor, nilai.penyajian2?.skor],
+                masalah: [nilai.masalah1?.skor, nilai.masalah2?.skor, nilai.masalah3?.skor],
+                solusi: [nilai.solusi1?.skor, nilai.solusi2?.skor, nilai.solusi3?.skor, nilai.solusi4?.skor, nilai.solusi5?.skor],
+                kualitas: [nilai.kualitas1?.skor, nilai.kualitas2?.skor, nilai.kualitas3?.skor],
+            });
+        
+        } catch (error) {
+            console.error("Gagal mengambil data nilai:", error);
+        }
         setOpenDialog(true);
-        setDataDialog({ id });
+        setSelectedId(id);
       };
     
+      const handleSaveDialog = async (id) => {
+        try {
+            const response = await fetch(`http://localhost:5000/inovatif/${selectedId}/nilai`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(dataDialog),
+            });
+
+            if (!response.ok) {
+                throw new Error("Gagal menyimpan data nilai");
+            }
+
+            const data = await response.json();
+            console.log("Data berhasil disimpan:", data);
+            handleCloseDialog();
+        } catch (err) {
+            console.error("Gagal menyimpan data:", err);
+        }
+    };
       const handleCloseDialog = () => {
         setOpenDialog(false);
-        setDataDialog({});
+        resetDataDialog();
       };
     
     const handleAccountClick = (event) => {
@@ -88,23 +161,23 @@ function BerkasJuri() {
     const handleLogout = async () => {
         try {
           // Panggil endpoint logout (opsional)
-          await fetch("http://localhost:5000/logout", {
-            method: "POST",
+          await fetch('http://localhost:5000/logout', {
+            method: 'POST',
             headers: {
-              "Content-Type": "application/json",
+              'Content-Type': 'application/json',
             },
           });
     
           // Hapus token dari localStorage
-          localStorage.removeItem("token");
+          localStorage.removeItem('token');
     
           // Redirect ke halaman login
-          navigate("/landingpage");
+          navigate('/login');
         } catch (err) {
-          console.error("Logout gagal:", err);
+          console.error('Logout gagal:', err);
         }
       };
-      
+    
     return (
         <Box sx={{ display: 'flex'}}>
             <Box sx={{ 
@@ -254,7 +327,7 @@ function BerkasJuri() {
                                                         </IconButton>
                                                 </TableCell>
                                                 <TableCell>
-                                                    <IconButton onClick={() => handleOpenDialog()} >
+                                                    <IconButton onClick={() => handleOpenDialog(berkas.id)} >
                                                         <UploadFileIcon sx={{ color: '#003366' }} />
                                                     </IconButton>
                                                 </TableCell>
@@ -299,52 +372,52 @@ function BerkasJuri() {
                                 <Typography variant='h8' sx={{ fontWeight: 'bold', color: '#1E376D', marginBottom: 1, marginTop: 5 }}>PENYAJIAN</Typography><br></br>
 
                                 <Typography variant='caption' sx={{ fontWeight: 'bold', color: '#1E376D', marginBottom: 1 }}>Penggunaan Bahasa Indonesia yang Baik dan Benar</Typography>
-                                <TextField fullWidth variant="outlined" size="small" sx={{ marginBottom: 1, '& .MuiOutlinedInput-root': { width: 300 } }} />
+                                <TextField fullWidth variant="outlined" size="small" sx={{ marginBottom: 1, '& .MuiOutlinedInput-root': { width: 300 } }} name='penyajian.0' value={dataDialog.penyajian[0]} onChange={handleChage} />
 
                                 <Typography variant='caption' sx={{ fontWeight: 'bold', color: '#1E376D', marginBottom: 1 }}>Kesesuaian pengutipan dan acuan standar</Typography>
-                                <TextField fullWidth variant="outlined" size="small" sx={{ marginBottom: 1, '& .MuiOutlinedInput-root': { width: 300 } }} />
+                                <TextField fullWidth variant="outlined" size="small" sx={{ marginBottom: 1, '& .MuiOutlinedInput-root': { width: 300 } }} name='penyajian.1' value={dataDialog.penyajian[1]} onChange={handleChage}/>
 
                                 <Typography variant='h8' sx={{ fontWeight: 'bold', color: '#1E376D'}}>SUBSTANSI PRODUK INOVATIF</Typography>< br></br>
 
                                 <Typography variant='h10' sx={{ fontWeight: 'bold', color: '#1E376D'}}>MASALAH</Typography><br></br>
                                 
                                 <Typography variant='caption' noWrap sx={{ fontWeight: 'bold', color: '#1E376D', marginBottom: 1 }}>Fakta atau gejala lingkungan yang menarik</Typography>
-                                <TextField fullWidth variant="outlined" size="small" sx={{ marginBottom: 1, '& .MuiOutlinedInput-root': { width: 300 } }} />
+                                <TextField fullWidth variant="outlined" size="small" sx={{ marginBottom: 1, '& .MuiOutlinedInput-root': { width: 300 } }} name='masalah.0' value={dataDialog.masalah[0]} onChange={handleChage}/>
 
                                 <Typography variant='caption'  sx={{ fontWeight: 'bold', color: '#1E376D', marginBottom: 1 }}>Identifikasi masalah yang terdapat dalam fakta</Typography>
-                                <TextField fullWidth variant="outlined" size="small" sx={{ marginBottom: 1, '& .MuiOutlinedInput-root': { width: 300 } }} />
+                                <TextField fullWidth variant="outlined" size="small" sx={{ marginBottom: 1, '& .MuiOutlinedInput-root': { width: 300 } }} name='masalah.1' value={dataDialog.masalah[1]} onChange={handleChage}/>
 
                                 <Typography variant='caption'  sx={{ fontWeight: 'bold', color: '#1E376D', marginBottom: 1 }}>Adanya uraian pihak terdampak</Typography>
-                                <TextField fullWidth variant="outlined" size="small" sx={{ marginBottom: 1, '& .MuiOutlinedInput-root': { width: 300 } }} />
+                                <TextField fullWidth variant="outlined" size="small" sx={{ marginBottom: 1, '& .MuiOutlinedInput-root': { width: 300 } }} name='masalah.2' value={dataDialog.masalah[2]} onChange={handleChage}/>
                             </Grid>
                             <Grid item xs={6} >
                                 <Typography variant='h8' sx={{ fontWeight: 'bold', color: '#1E376D', marginBottom: 1, marginTop: 2 }}>SOLUSI</Typography><br></br>
 
                                 <Typography variant='caption' sx={{ fontWeight: 'bold', color: '#1E376D', marginBottom: 1 }}>Uraian mengenai pihak penerima manfaat</Typography>
-                                <TextField fullWidth variant="outlined" size="small" sx={{ marginBottom: 1, '& .MuiOutlinedInput-root': { width: 300 } }} />
+                                <TextField fullWidth variant="outlined" size="small" sx={{ marginBottom: 1, '& .MuiOutlinedInput-root': { width: 300 } }} name='solusi.0' value={dataDialog.solusi[0]} onChange={handleChage}/>
 
                                 <Typography variant='caption' sx={{ fontWeight: 'bold', color: '#1E376D', marginBottom: 1 }}>Rincian langkah-langkah untuk mencapai solusi</Typography>
-                                <TextField fullWidth variant="outlined" size="small" sx={{ marginBottom: 1, '& .MuiOutlinedInput-root': { width: 300 } }} />
+                                <TextField fullWidth variant="outlined" size="small" sx={{ marginBottom: 1, '& .MuiOutlinedInput-root': { width: 300 } }} name='solusi.1' value={dataDialog.solusi[1]} onChange={handleChage}/>
 
                                 <Typography variant='caption' sx={{ fontWeight: 'bold', color: '#1E376D', marginBottom: 1 }}>Uraian mengenai kebutuhan sumber daya</Typography>
-                                <TextField fullWidth variant="outlined" size="small" sx={{ marginBottom: 1, '& .MuiOutlinedInput-root': { width: 300 } }} />
+                                <TextField fullWidth variant="outlined" size="small" sx={{ marginBottom: 1, '& .MuiOutlinedInput-root': { width: 300 } }} name='solusi.2' value={dataDialog.solusi[2]} onChange={handleChage}/>
 
                                 <Typography variant='caption' sx={{ fontWeight: 'bold', color: '#1E376D', marginBottom: 1 }}>Uraian mengenai pihak penerima manfaat</Typography>
-                                <TextField fullWidth variant="outlined" size="small" sx={{ marginBottom: 1, '& .MuiOutlinedInput-root': { width: 300 } }} />
+                                <TextField fullWidth variant="outlined" size="small" sx={{ marginBottom: 1, '& .MuiOutlinedInput-root': { width: 300 } }} name='solusi.3' value={dataDialog.solusi[3]} onChange={handleChage}/>
 
                                 <Typography variant='caption' sx={{ fontWeight: 'bold', color: '#1E376D', marginBottom: 1 }}>Uraian mengenai solusi yang berciri SMART</Typography>
-                                <TextField fullWidth variant="outlined" size="small" sx={{ marginBottom: 1, '& .MuiOutlinedInput-root': { width: 300 } }} />
+                                <TextField fullWidth variant="outlined" size="small" sx={{ marginBottom: 1, '& .MuiOutlinedInput-root': { width: 300 } }} name='solusi.4' value={dataDialog.solusi[4]} onChange={handleChage}/>
 
                                 <Typography variant='h8' sx={{ fontWeight: 'bold', color: '#1E376D'}}>KUALITAS PRODUK INOVATIF</Typography><br></br>
                                 
                                 <Typography variant='caption' noWrap sx={{ fontWeight: 'bold', color: '#1E376D', marginBottom: 1 }}>Keunikan Produk</Typography>
-                                <TextField fullWidth variant="outlined" size="small" sx={{ marginBottom: 1, '& .MuiOutlinedInput-root': { width: 300 } }} />
+                                <TextField fullWidth variant="outlined" size="small" sx={{ marginBottom: 1, '& .MuiOutlinedInput-root': { width: 300 } }} name='kualitas.0' value={dataDialog.kualitas[0]} onChange={handleChage}/>
 
                                 <Typography variant='caption'  sx={{ fontWeight: 'bold', color: '#1E376D', marginBottom: 1  }}>Orisinalitas Produk</Typography>
-                                <TextField fullWidth variant="outlined" size="small" sx={{ marginBottom: 1, '& .MuiOutlinedInput-root': { width: 300 } }} />
+                                <TextField fullWidth variant="outlined" size="small" sx={{ marginBottom: 1, '& .MuiOutlinedInput-root': { width: 300 } }} name='kualitas.1' value={dataDialog.kualitas[1]} onChange={handleChage}/>
 
                                 <Typography variant='caption'  sx={{ fontWeight: 'bold', color: '#1E376D', marginBottom: 1 }}>Kelayakan Produk</Typography>
-                                <TextField fullWidth variant="outlined" size="small" sx={{ marginBottom: 1, '& .MuiOutlinedInput-root': { width: 300 }   }} />
+                                <TextField fullWidth variant="outlined" size="small" sx={{ marginBottom: 1, '& .MuiOutlinedInput-root': { width: 300 }   }}name='kualitas.2' value={dataDialog.kualitas[2]} onChange={handleChage}/>
                             </Grid>
                         </Grid>
                     </Paper>    
@@ -365,7 +438,7 @@ function BerkasJuri() {
                                 Tutup
                             </Button>
                             <Button 
-                                onClick={handleCloseDialog} 
+                                onClick={handleSaveDialog} 
                                 variant="contained" 
                                 sx={{ 
                                     backgroundColor: '#0DBD2E', 

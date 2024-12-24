@@ -74,6 +74,9 @@ function Registrasi() {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
+    if (name === "noHp" && !/^\d*$/.test(value)) {
+      return; // Ignore non-numeric input
+    }
     setFormData((prevData) => ({
       ...prevData,
       [name]: value,
@@ -272,6 +275,7 @@ function Registrasi() {
               <TextField
                 label="No. Handphone"
                 name="noHp"
+                type='tel'
                 fullWidth
                 variant="outlined"
                 value={formData.noHp}
@@ -284,6 +288,7 @@ function Registrasi() {
               <TextField
                 label="Email"
                 name="email"
+                type='email'
                 fullWidth
                 variant="outlined"
                 value={formData.email}

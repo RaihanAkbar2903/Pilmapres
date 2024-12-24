@@ -22,7 +22,7 @@ router.get("/", (req, res) => {
       });
     } else if (user.role == "Juri") {
       const query =
-        "SELECT j.id, namaLengkap, nim , prodi FROM jadwal_presentasi as j JOIN pendaftaran ON j.id_pendaftaran = pendaftaran.id";
+        "SELECT j.id, namaLengkap, nim , prodi FROM jadwal_presentasi as j JOIN pendaftaran ON j.id_pendaftaran = pendaftaran.id ORDER BY nilai ASC";
       db.query(query, (err, results) => {
         if (err) return res.status(500).json({ error: err });
         return res.json(results);
@@ -77,7 +77,7 @@ router.get("/:id", async (req, res) => {
   if (!jadwal[0]) {
     return res.status(404).json({ error: "Jadwal tidak ditemukan" });
   }
-
+  console.log(jadwal[0]);
   jadwal[0].nilai = JSON.parse(jadwal[0].nilai);
   return res.status(200).json(jadwal[0]);
 });

@@ -30,6 +30,7 @@ import {
   TableContainer,
   TableHead,
   TableRow,
+  TableSortLabel,
   TextField,
   Typography
 } from "@mui/material";
@@ -44,6 +45,15 @@ function NilaiAdmin() {
   const [search, setSearch] = useState("");
   const [filteredBerkas, setFilteredBerkas] = useState([]);
   const navigate = useNavigate();
+
+  const [order, setOrder] = useState("asc");
+  const [orderBy, setOrderBy] = useState("nilaiTotal");
+
+  const handleRequestSort = (property) => {
+    const isAsc = orderBy === property && order === "asc";
+    setOrder(isAsc ? "desc" : "asc");
+    setOrderBy(property);
+  };
 
   useEffect(() => {
     fetchBerkas();
@@ -60,6 +70,16 @@ function NilaiAdmin() {
       )
     );
   }, [search, berkas]);
+
+  const calculateTotal = (berkas) => {
+    if (typeof berkas === "undefined") {
+      return 0;
+    }
+
+    return parseFloat(
+      (berkas?.jadwal_presentasi?.total + berkas?.inovatif?.nilai?.total) / 2
+    ).toFixed(2);
+  };
 
   const fetchBerkas = async () => {
     try {
@@ -401,7 +421,9 @@ function NilaiAdmin() {
                 />
                 <Table>
                   <TableHead>
-                    <TableRow sx={{ backgroundColor: "#003366" }}>
+                    <TableRow
+                      sx={{ backgroundColor: "#003366", color: "#FFFFFF" }}
+                    >
                       <TableCell sx={{ color: "#FFFFFF", fontWeight: "bold" }}>
                         No
                       </TableCell>
@@ -411,7 +433,23 @@ function NilaiAdmin() {
                       <TableCell sx={{ color: "#FFFFFF", fontWeight: "bold" }}>
                         Nim
                       </TableCell>
-                      <TableCell sx={{ color: "#FFFFFF", fontWeight: "bold" }}>
+                      <TableCell
+                        sx={{ color: "#FFFFFF", fontWeight: "bold" }}
+                        sortDirection={orderBy === "nilaiTotal" ? order : false}
+                      >
+                        <TableSortLabel
+                          active={orderBy === "nilaiTotal"}
+                          direction={orderBy === "nilaiTotal" ? order : "asc"}
+                          onClick={() => handleRequestSort("nilaiTotal")}
+                          sx={{ "&.Mui-active": { color: "#FFFFFF" },"&.Mui-active .MuiTableSortLabel-icon": { color: "#FFFFFF" }}}
+                        >
+                          Nilai Total
+                        </TableSortLabel>
+                      </TableCell>
+                      <TableCell
+                        sortDirection
+                        sx={{ color: "#FFFFFF", fontWeight: "bold" }}
+                      >
                         Keterangan
                       </TableCell>
                       <TableCell sx={{ color: "#FFFFFF", fontWeight: "bold" }}>
@@ -420,7 +458,53 @@ function NilaiAdmin() {
                     </TableRow>
                   </TableHead>
                   <TableBody>
-                    {(filteredBerkas || berkas)?.map((berkas, index) => (
+                    {filteredBerkas
+                      .sort((a, b) => {
+                        const totalA = calculateTotal(a);
+                        const totalB = calculateTotal(b);
+                        return order === "asc"
+                          ? totalA - totalB
+                          : totalB - totalA;
+                      })
+                      .map((row, index) => (
+                        <TableRow key={row.id} sx={{
+                          backgroundColor:
+                            index % 2 === 0 ? "#E8F0FE" : "#ffffff",
+                        }}>
+                          <TableCell>{index + 1}</TableCell>
+                          <TableCell>{row.namaLengkap}</TableCell>
+                          <TableCell>{row.nim}</TableCell>
+                          <TableCell>{calculateTotal(row)}</TableCell>
+                          <TableCell
+                            sx={{
+                              color:
+                                row.keterangan === "menunggu"
+                                  ? "orange"
+                                  : row.keterangan === "lolos"
+                                  ? "green"
+                                  : "red",
+                            }}
+                          >
+                            {row.keterangan === "menunggu"
+                              ? "Menunggu"
+                              : row.keterangan === "lolos"
+                              ? "Lolos"
+                              : "Tidak Lolos"}
+                          </TableCell>
+                          <TableCell>
+                            <Stack direction="row" spacing={0}>
+                              <IconButton
+                                onClick={() => {
+                                  navigate(`/nilaiadmin/${row.id_pendaftaran}`);
+                                }}
+                              >
+                                <InfoIcon />
+                              </IconButton>
+                            </Stack>
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                    {/* {(filteredBerkas || berkas)?.map((berkas, index) => (
                       <TableRow
                         key={index}
                         sx={{
@@ -431,22 +515,44 @@ function NilaiAdmin() {
                         <TableCell>{index + 1}</TableCell>
                         <TableCell>{berkas.namaLengkap}</TableCell>
                         <TableCell>{berkas.nim}</TableCell>
-                        <TableCell sx={{ color: berkas.keterangan === "menunggu" ? "orange" : berkas.keterangan === "lolos" ? "green" : "red" }}>
-                          {berkas.keterangan === "menunggu" ? "Menunggu" : berkas.keterangan === "lolos" ? "Lolos" : "Tidak Lolos"}
+                        <TableCell>
+                          {parseFloat(
+                            (berkas?.jadwal_presentasi?.total +
+                              berkas?.inovatif?.nilai?.total) /
+                              2
+                          ).toFixed(2)}
+                        </TableCell>
+                        <TableCell
+                          sx={{
+                            color:
+                              berkas.keterangan === "menunggu"
+                                ? "orange"
+                                : berkas.keterangan === "lolos"
+                                ? "green"
+                                : "red",
+                          }}
+                        >
+                          {berkas.keterangan === "menunggu"
+                            ? "Menunggu"
+                            : berkas.keterangan === "lolos"
+                            ? "Lolos"
+                            : "Tidak Lolos"}
                         </TableCell>
                         <TableCell>
                           <Stack direction="row" spacing={0}>
                             <IconButton
                               onClick={() => {
-                                navigate(`/nilaiadmin/${berkas.id_pendaftaran}`);
+                                navigate(
+                                  `/nilaiadmin/${berkas.id_pendaftaran}`
+                                );
                               }}
                             >
-                              <InfoIcon/>
+                              <InfoIcon />
                             </IconButton>
                           </Stack>
                         </TableCell>
                       </TableRow>
-                    ))}
+                    ))} */}
                   </TableBody>
                 </Table>
               </TableContainer>

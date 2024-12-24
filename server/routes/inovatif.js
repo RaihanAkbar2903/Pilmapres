@@ -34,7 +34,7 @@ router.get("/", (req, res) => {
           pendaftaran.prodi,
           nilai 
         FROM inovatif 
-        INNER JOIN pendaftaran ON inovatif.inovatif_pendaftaran = pendaftaran.id
+        INNER JOIN pendaftaran ON inovatif.inovatif_pendaftaran = pendaftaran.id ORDER BY nilai ASC
       `;
       db.query(query, (err, results) => {
         if (err) return res.status(500).json({ error: err });
@@ -65,7 +65,6 @@ router.get("/:id", (req, res) => {
         return res.status(404).json({ error: "Data inovatif tidak ditemukan" });
       }
       results[0].nilai = JSON.parse(results[0].nilai);
-      console.log("detail nilai:   ",results[0]);
       return res.status(200).json(results[0]);
     });
   });
@@ -151,7 +150,7 @@ router.post("/:id/nilai",async (req, res) => {
   const nilai = {
     penyajian1:{
       skor: penyajian[0],
-      skor_terbobot: penyajian[0] * 0.10
+      skor_terbobot: penyajian[0] * 0.1
     },
     penyajian2:{
       skor: penyajian[1],
@@ -201,7 +200,7 @@ router.post("/:id/nilai",async (req, res) => {
       skor: kualitas[2],
       skor_terbobot: kualitas[2] * 0.10
     },
-    total: (penyajian[0] * 1) + (penyajian[1] * 0.05) + (masalah[0] * 0.07) + (masalah[1] * 0.08) + (masalah[2] * 0.05) + (solusi[0] * 0.05) + (solusi[1] * 0.05) + (solusi[2] * 0.05) + (solusi[3] * 0.05) + (solusi[4] * 0.15) + (kualitas[0] * 0.10) + (kualitas[1] * 0.10) + (kualitas[2] * 0.10)
+    total: (penyajian[0] * 0.1) + (penyajian[1] * 0.05) + (masalah[0] * 0.07) + (masalah[1] * 0.08) + (masalah[2] * 0.05) + (solusi[0] * 0.05) + (solusi[1] * 0.05) + (solusi[2] * 0.05) + (solusi[3] * 0.05) + (solusi[4] * 0.15) + (kualitas[0] * 0.10) + (kualitas[1] * 0.10) + (kualitas[2] * 0.10)
   }
   
   const query = "UPDATE inovatif SET nilai = ? WHERE id = ?";

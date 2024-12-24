@@ -91,7 +91,7 @@ function PresentasiJuri() {
         }));
     };
 
-    const handleSubmit = () => {
+    const handleSubmit = async () => {
         try {
             const response = fetch(`http://localhost:5000/jadwalpresentasi/${selectedPeserta.id}/nilai`, {
                 method: 'POST',
