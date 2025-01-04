@@ -247,10 +247,11 @@ function BerkasCU() {
           borderRight: "2px solid #E0E0E0",
           minHeight: "100vh",
           height: "auto",
+          flexShrink: 0
         }}
       >
         <Box>
-          <Box sx={{ textAlign: "center", marginBottom: 2 }}>
+          <Box sx={{ textAlign: "center", marginBottom: 0, marginRight: 8 }}>
             <img src={Logo} alt="Logo Pilmapres" style={{ width: "120px" }} />
           </Box>
 
@@ -259,6 +260,7 @@ function BerkasCU() {
             <ListItem
               sx={{
                 marginBottom: "10px",
+                alignItems: "center"
               }}
             >
               <Button
@@ -266,18 +268,25 @@ function BerkasCU() {
                 onClick={() => navigate("/dashboardmahasiswa")} // Tambahkan navigasi
                 sx={{
                   color: "#1E376D",
+                  display: "flex",
+                  justifyContent: "flex-start",
                   "&:hover": {
                     backgroundColor: "#E0E0E0",
                     color: "#003366",
                   },
                 }}
               >
-                <ListItemIcon sx={{ color: "#1E376D" }}>
+                <ListItemIcon sx={{ color: "#1E376D", minWidth: "30px", display: "flex", alignItems: "center" }}>
                   <HomeIcon />
                 </ListItemIcon>
                 <ListItemText
                   primary="Beranda"
-                  primaryTypographyProps={{ style: { color: "#1E376D" } }}
+                  primaryTypographyProps={{ style: { color: "#1E376D", fontSize: "14px" } }}
+                  sx={{
+                    margin: 0,
+                    display: "flex",
+                    alignItems: "center"
+                  }}
                 />
               </Button>
             </ListItem>
@@ -291,23 +300,30 @@ function BerkasCU() {
                 onClick={handleToggleBerkas}
                 sx={{
                   color: "#1E376D",
+                  display: "flex",
+                  justifyContent: "flex-start",
                   "&:hover": {
                     backgroundColor: "#E0E0E0",
                     color: "#003366",
                   },
                 }}
               >
-                <ListItemIcon sx={{ color: "#1E376D" }}>
+                <ListItemIcon sx={{ color: "#1E376D", minWidth: "30px", display: "flex", alignItems: "center" }}>
                   <DescriptionIcon />
                 </ListItemIcon>
                 <ListItemText
                   primary="Berkas"
-                  primaryTypographyProps={{ style: { color: "#1E376D" } }}
+                  primaryTypographyProps={{ style: { color: "#1E376D", fontSize: "14px" } }}
+                  sx={{
+                    margin: 0,
+                    display: "flex",
+                    alignItems: "center"
+                  }}
                 />
                 {openBerkas ? (
-                  <ExpandLess sx={{ color: "#1E376D" }} />
+                  <ExpandLess sx={{ color: "#1E376D", marginRight: "50px" }} />
                 ) : (
-                  <ExpandMore sx={{ color: "#1E376D" }} />
+                  <ExpandMore sx={{ color: "#1E376D", marginRight: "50px" }} />
                 )}
               </Button>
             </ListItem>
@@ -324,18 +340,25 @@ function BerkasCU() {
                     onClick={() => navigate("/berkascu")}
                     sx={{
                       color: "#1E376D",
+                      display: "flex",
+                      justifyContent: "flex-start",
                       "&:hover": {
                         backgroundColor: "#E0E0E0",
                         color: "#003366",
                       },
                     }}
                   >
-                    <ListItemIcon sx={{ color: "#1E376D" }}>
+                    <ListItemIcon sx={{ color: "#1E376D", minWidth: "30px", display: "flex", alignItems: "center" }}>
                       <DescriptionIcon />
                     </ListItemIcon>
                     <ListItemText
                       primary="CU"
-                      primaryTypographyProps={{ style: { color: "#1E376D" } }}
+                      primaryTypographyProps={{ style: { color: "#1E376D", fontSize: "14px" } }}
+                      sx={{
+                        margin: 0,
+                        display: "flex",
+                        alignItems: "center"
+                      }}
                     />
                   </Button>
                 </ListItem>
@@ -350,18 +373,25 @@ function BerkasCU() {
                     onClick={() => navigate("/berkaspi")}
                     sx={{
                       color: "#1E376D",
+                      display: "flex",
+                      justifyContent: "flex-start",
                       "&:hover": {
                         backgroundColor: "#E0E0E0",
                         color: "#003366",
                       },
                     }}
                   >
-                    <ListItemIcon sx={{ color: "#1E376D" }}>
+                    <ListItemIcon sx={{ color: "#1E376D", minWidth: "30px", display: "flex", alignItems: "center" }}>
                       <DescriptionIcon />
                     </ListItemIcon>
                     <ListItemText
                       primary="PI"
-                      primaryTypographyProps={{ style: { color: "#1E376D" } }}
+                      primaryTypographyProps={{ style: { color: "#1E376D", fontSize: "14px" } }}
+                      sx={{
+                        margin: 0,
+                        display: "flex",
+                        alignItems: "center"
+                      }}
                     />
                   </Button>
                 </ListItem>
@@ -377,18 +407,25 @@ function BerkasCU() {
                 onClick={() => navigate("/jadwal")}
                 sx={{
                   color: "#1E376D",
+                  display: "flex",
+                  justifyContent: "flex-start",
                   "&:hover": {
                     backgroundColor: "#E0E0E0",
                     color: "#003366",
                   },
                 }}
               >
-                <ListItemIcon sx={{ color: "#1E376D" }}>
+                <ListItemIcon sx={{ color: "#1E376D", minWidth: "30px", display: "flex", alignItems: "center" }}>
                   <EventIcon />
                 </ListItemIcon>
                 <ListItemText
                   primary="Jadwal"
-                  primaryTypographyProps={{ style: { color: "#1E376D" } }}
+                  primaryTypographyProps={{ style: { color: "#1E376D", fontSize: "14px" } }}
+                  sx={{
+                    margin: 0,
+                    display: "flex",
+                    alignItems: "center"
+                  }}
                 />
               </Button>
             </ListItem>
@@ -402,18 +439,25 @@ function BerkasCU() {
                 onClick={() => navigate("/hasil")}
                 sx={{
                   color: "#1E376D",
+                  display: "flex",
+                  justifyContent: "flex-start",
                   "&:hover": {
                     backgroundColor: "#E0E0E0",
                     color: "#003366",
                   },
                 }}
               >
-                <ListItemIcon sx={{ color: "#1E376D" }}>
+                <ListItemIcon sx={{ color: "#1E376D", minWidth: "30px", display: "flex", alignItems: "center" }}>
                   <StarIcon />
                 </ListItemIcon>
                 <ListItemText
                   primary="Hasil"
-                  primaryTypographyProps={{ style: { color: "#1E376D" } }}
+                  primaryTypographyProps={{ style: { color: "#1E376D", fontSize: "14px" } }}
+                  sx={{
+                    margin: 0,
+                    display: "flex",
+                    alignItems: "center"
+                  }}
                 />
               </Button>
             </ListItem>
@@ -435,7 +479,7 @@ function BerkasCU() {
             alignItems: "center",
           }}
         >
-          <Typography variant="h4" sx={{ color: "#FFFFFF" }}>
+          <Typography variant="h5" sx={{ color: "#FFFFFF" }}>
             Berkas
           </Typography>
           <IconButton
@@ -464,7 +508,7 @@ function BerkasCU() {
           <Grid item xs={12} md={10}>
             <Paper sx={{ padding: 1, backgroundColor: "#FFFFFF" }}>
               <Typography
-                variant="h3"
+                variant="h4"
                 gutterBottom
                 sx={{
                   fontWeight: "bold",
@@ -480,7 +524,7 @@ function BerkasCU() {
                 color="primary"
                 startIcon={<UploadFileIcon />}
                 onClick={handleOpenDialog}
-                sx={{ marginBottom: 2, backgroundColor: "#003366" }}
+                sx={{ marginBottom: 2, backgroundColor: "#3DA3C2" }}
               >
                 Unggah Berkas
               </Button>
@@ -663,8 +707,8 @@ function BerkasCU() {
                       variant="contained"
                       component="label"
                       sx={{
-                        backgroundColor: "#1E376D",
-                        color: "#FFFFFF",
+                        backgroundColor: "#FFFFFF",
+                        color: "#000000",
                         borderRadius: "4px",
                         textTransform: "none",
                       }}

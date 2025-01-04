@@ -286,206 +286,246 @@ function JadwalPresentasi() {
           borderRight: "2px solid #E0E0E0",
           minHeight: "100vh",
           height: "auto",
+          flexShrink: 0
         }}
       >
         <Box>
-          <Box sx={{ textAlign: "center", marginBottom: 2 }}>
+          <Box sx={{ textAlign: "center", marginBottom: 0, marginRight: "50px" }}>
             <img src={Logo} alt="Logo Pilmapres" style={{ width: "120px" }} />
           </Box>
           <List sx={{ padding: 0 }}>
-            <ListItem sx={{ marginBottom: "10px" }}>
+            <ListItem sx={{ marginBottom: "10px", alignItems: "center"}}>
               <Button
                 fullWidth
                 onClick={() => navigate("/dashboardadmin")}
                 sx={{
                   color: "#1E376D",
+                  display: "flex",
+                  justifyContent: "flex-start",
                   "&:hover": {
                     backgroundColor: "#E0E0E0",
                     color: "#003366",
                   },
                 }}
               >
-                <ListItemIcon sx={{ color: "#1E376D" }}>
+                <ListItemIcon sx={{ color: "#1E376D", minWidth: "40px", display: "flex", alignItems: "center" }}>
                   <HomeIcon />
                 </ListItemIcon>
                 <ListItemText
                   primary="Beranda"
-                  primaryTypographyProps={{ style: { color: "#1E376D" } }}
+                  primaryTypographyProps={{ style: { color: "#1E376D", fontSize: "14px" } }}
+                  sx={{ margin: 0, display: "flex", alignItems: "center"}}
                 />
               </Button>
             </ListItem>
-            <ListItem sx={{ marginBottom: "10px" }}>
+            <ListItem sx={{ marginBottom: "10px", alignItems: "center" }}>
               <Button
                 fullWidth
                 onClick={() => navigate("/datapengguna")}
                 sx={{
                   color: "#1E376D",
+                  display: "flex",
+                  justifyContent: "flex-start",
                   "&:hover": {
                     backgroundColor: "#E0E0E0",
                     color: "#003366",
                   },
                 }}
               >
-                <ListItemIcon sx={{ color: "#1E376D" }}>
+                <ListItemIcon sx={{ color: "#1E376D", minWidth: "40px", display: "flex", alignItems: "center"  }}>
                   <PeopleIcon />
                 </ListItemIcon>
                 <ListItemText
                   primary="Pengguna"
-                  primaryTypographyProps={{ style: { color: "#1E376D" } }}
+                  primaryTypographyProps={{ style: { color: "#1E376D", fontSize: "14px"  } }}
+                  sx={{ margin: 0, display: "flex", alignItems: "center"}}
                 />
               </Button>
             </ListItem>
-            <ListItem sx={{ marginBottom: "10px" }}>
+            <ListItem sx={{ marginBottom: "10px", alignItems: "center" }}>
               <Button
                 fullWidth
                 onClick={() => navigate("/berkasadmincu")}
                 sx={{
                   color: "#1E376D",
+                  display: "flex",
+                  justifyContent: "flex-start",
                   "&:hover": {
                     backgroundColor: "#E0E0E0",
                     color: "#003366",
                   },
                 }}
               >
-                <ListItemIcon sx={{ color: "#1E376D" }}>
+                <ListItemIcon sx={{ color: "#1E376D", minWidth: "40px", display: "flex", alignItems: "center"  }}>
                   <DescriptionIcon />
                 </ListItemIcon>
                 <ListItemText
                   primary="Berkas"
-                  primaryTypographyProps={{ style: { color: "#1E376D" } }}
+                  primaryTypographyProps={{ style: { color: "#1E376D", fontSize: "14px"  } }}
+                  sx={{ margin: 0, display: "flex", alignItems: "center"}}
                 />
               </Button>
             </ListItem>
-            <ListItem sx={{ marginBottom: "10px" }}>
+            <ListItem sx={{ marginBottom: "10px", alignItems: "center" }}>
               <Button
                 fullWidth
                 onClick={() => navigate("/jadwalpresentasi")}
                 sx={{
                   color: "#1E376D",
+                  display: "flex",
+                  justifyContent: "flex-start",
                   "&:hover": {
                     backgroundColor: "#E0E0E0",
                     color: "#003366",
                   },
                 }}
               >
-                <ListItemIcon sx={{ color: "#1E376D" }}>
+                <ListItemIcon sx={{ color: "#1E376D", minWidth: "40px", display: "flex", alignItems: "center"  }}>
                   <PresentToAllIcon />
                 </ListItemIcon>
                 <ListItemText
                   primary="Presentasi"
-                  primaryTypographyProps={{ style: { color: "#1E376D" } }}
+                  primaryTypographyProps={{ style: { color: "#1E376D", fontSize: "14px"  } }}
+                  sx={{ margin: 0, display: "flex", alignItems: "center"}}
                 />
               </Button>
             </ListItem>
-            <ListItem sx={{ marginBottom: "10px" }}>
+            <ListItem sx={{ marginBottom: "10px", alignItems: "center" }}>
               <Button
                 fullWidth
                 onClick={() => navigate("/nilaiadmin")}
                 sx={{
                   color: "#1E376D",
+                  display: "flex",
+                  justifyContent: "flex-start",
                   "&:hover": {
                     backgroundColor: "#E0E0E0",
                     color: "#003366",
                   },
                 }}
               >
-                <ListItemIcon sx={{ color: "#1E376D" }}>
+                <ListItemIcon sx={{ color: "#1E376D", minWidth: "40px", display: "flex", alignItems: "center"  }}>
                   <MilitaryTechRoundedIcon />
                 </ListItemIcon>
                 <ListItemText
                   primary="Nilai"
-                  primaryTypographyProps={{ style: { color: "#1E376D" } }}
+                  primaryTypographyProps={{ style: { color: "#1E376D", fontSize: "14px"  } }}
+                  sx={{ margin: 0, display: "flex", alignItems: "center"}}
                 />
               </Button>
             </ListItem>
-            <ListItem sx={{ marginBottom: "10px" }}>
+            <ListItem sx={{ marginBottom: "10px", alignItems: "center" }}>
               <Button
                 fullWidth
                 onClick={handleToggleLaman}
                 sx={{
                   color: "#1E376D",
+                  display: "flex",
+                  justifyContent: "flex-start",
                   "&:hover": {
                     backgroundColor: "#E0E0E0",
                     color: "#003366",
                   },
                 }}
               >
-                <ListItemIcon sx={{ color: "#1E376D" }}>
+                <ListItemIcon sx={{ color: "#1E376D", minWidth: "40px", display: "flex", alignItems: "center"  }}>
                   <WebIcon />
                 </ListItemIcon>
                 <ListItemText
                   primary="Laman"
-                  primaryTypographyProps={{ style: { color: "#1E376D" } }}
+                  primaryTypographyProps={{ style: { color: "#1E376D", fontSize: "14px"  } }}
+                  sx={{ margin: 0, display: "flex", alignItems: "center"}}
                 />
                 {openLaman ? (
-                  <ExpandLess sx={{ color: "#1E376D" }} />
+                  <ExpandLess sx={{ color: "#1E376D", marginRight: "25px" }} />
                 ) : (
-                  <ExpandMore sx={{ color: "#1E376D" }} />
+                  <ExpandMore sx={{ color: "#1E376D", marginRight: "25px" }} />
                 )}
               </Button>
             </ListItem>
             <Collapse in={openLaman} timeout="auto" unmountOnExit>
               <List component="div" disablePadding>
-                <ListItem sx={{ pl: 4, marginBottom: "10px" }}>
+                <ListItem sx={{ pl: 4, marginBottom: "10px", alignItems: "center" }}>
                   <Button
                     fullWidth
                     onClick={() => navigate("/banner")}
                     sx={{
                       color: "#1E376D",
+                      display: "flex",
+                      justifyContent: "flex-start",
                       "&:hover": {
                         backgroundColor: "#E0E0E0",
                         color: "#003366",
                       },
                     }}
                   >
-                    <ListItemIcon sx={{ color: "#1E376D" }}>
+                    <ListItemIcon sx={{ color: "#1E376D", minWidth: "40px", display: "flex", alignItems: "center"  }}>
                       <ImageIcon />
                     </ListItemIcon>
                     <ListItemText
                       primary="Banner"
-                      primaryTypographyProps={{ style: { color: "#1E376D" } }}
+                      primaryTypographyProps={{ style: { color: "#1E376D", fontSize: "14px" } }}
+                      sx={{
+                        margin: 0,
+                        display: "flex",
+                        alignItems: "center",
+                      }}
                     />
                   </Button>
                 </ListItem>
-                <ListItem sx={{ pl: 4, marginBottom: "10px" }}>
+                <ListItem sx={{ pl: 4, marginBottom: "10px", alignItems: "center" }}>
                   <Button
                     fullWidth
                     onClick={() => navigate("/informasi")}
                     sx={{
                       color: "#1E376D",
+                      display: "flex",
+                      justifyContent: "flex-start",
                       "&:hover": {
                         backgroundColor: "#E0E0E0",
                         color: "#003366",
                       },
                     }}
                   >
-                    <ListItemIcon sx={{ color: "#1E376D" }}>
+                    <ListItemIcon sx={{ color: "#1E376D", minWidth: "40px", display: "flex", alignItems: "center"  }}>
                       <InfoIcon />
                     </ListItemIcon>
                     <ListItemText
                       primary="Informasi"
-                      primaryTypographyProps={{ style: { color: "#1E376D" } }}
+                      primaryTypographyProps={{ style: { color: "#1E376D", fontSize: "14px" } }}
+                      sx={{
+                        margin: 0,
+                        display: "flex",
+                        alignItems: "center",
+                      }}
                     />
                   </Button>
                 </ListItem>
-                <ListItem sx={{ pl: 4, marginBottom: "10px" }}>
+                <ListItem sx={{ pl: 4, marginBottom: "10px", alignItems: "center" }}>
                   <Button
                     fullWidth
                     onClick={() => navigate("/jadwalpilmapres")}
                     sx={{
                       color: "#1E376D",
+                      display: "flex",
+                      justifyContent: "flex-start",
                       "&:hover": {
                         backgroundColor: "#E0E0E0",
                         color: "#003366",
                       },
                     }}
                   >
-                    <ListItemIcon sx={{ color: "#1E376D" }}>
+                    <ListItemIcon sx={{ color: "#1E376D", minWidth: "40px", display: "flex", alignItems: "center"  }}>
                       <EventIcon />
                     </ListItemIcon>
                     <ListItemText
                       primary="Jadwal"
-                      primaryTypographyProps={{ style: { color: "#1E376D" } }}
+                      primaryTypographyProps={{ style: { color: "#1E376D", fontSize: "14px" } }}
+                      sx={{
+                        margin: 0,
+                        display: "flex",
+                        alignItems: "center",
+                      }}
                     />
                   </Button>
                 </ListItem>
@@ -504,7 +544,7 @@ function JadwalPresentasi() {
             borderRadius: 0,
           }}
         >
-          <Typography variant="h4" sx={{ color: "#FFFFFF" }}>
+          <Typography variant="h5" sx={{ color: "#FFFFFF" }}>
             Kelola Jadwal
           </Typography>
           <IconButton
@@ -539,7 +579,7 @@ function JadwalPresentasi() {
           <Grid item xs={12}>
             <Paper sx={{ padding: 1, backgroundColor: "#FFFFFF" }}>
               <Typography
-                variant="h3"
+                variant="h4"
                 gutterBottom
                 sx={{
                   fontWeight: "bold",
@@ -556,7 +596,7 @@ function JadwalPresentasi() {
                 color="primary"
                 sx={{
                   marginBottom: 2,
-                  backgroundColor: "#003366",
+                  backgroundColor: "#3DA3C2",
                   minWidth: "20vh",
                 }}
               >

@@ -62,157 +62,240 @@ function DashboardMahasiswa() {
         }
       };
 
-    return (
-        <Box sx={{ display: 'flex', height: '100vh' }}>
-            <Box sx={{ 
-                width: '250px', 
-                backgroundColor: '#FFFFFF', 
-                padding: 2, 
-                display: 'flex', 
-                flexDirection: 'column', 
-                justifyContent: 'space-between',
-                borderRight: '2px solid #E0E0E0',
-                minHeight: '100vh',
-                height: 'auto', 
-            }}>
-                <Box>
-                    <Box sx={{ textAlign: 'center', marginBottom: 2 }}>
-                        <img src={Logo} alt="Logo Pilmapres" style={{ width: '120px' }} />
-                    </Box>
-                    <List sx={{ padding: 0 }}>
-                        <ListItem 
-                            sx={{ 
-                                marginBottom: '10px',
-                            }}
-                        >
-                            <Button 
-                                fullWidth
-                                onClick={() => navigate('/dashboardmahasiswa')} // Tambahkan navigasi
-                                sx={{ 
-                                    color: '#1E376D', 
-                                    '&:hover': { 
-                                        backgroundColor: '#E0E0E0',
-                                        color: '#003366',
-                                    }, 
-                                }}
-                            >
-                                <ListItemIcon sx={{ color: '#1E376D' }}><HomeIcon /></ListItemIcon>
-                                <ListItemText primary="Beranda" primaryTypographyProps={{ style: { color: '#1E376D' } }} />
-                            </Button>
-                        </ListItem>
-                        <ListItem 
-                            sx={{ 
-                                marginBottom: '10px',
-                            }}
-                        >
-                            <Button 
-                                fullWidth
-                                onClick={handleToggleBerkas} 
-                                sx={{ 
-                                    color: '#1E376D', 
-                                    '&:hover': { 
-                                        backgroundColor: '#E0E0E0', 
-                                        color: '#003366',
-                                    }, 
-                                }}
-                            >
-                                <ListItemIcon sx={{ color: '#1E376D' }}><DescriptionIcon /></ListItemIcon>
-                                <ListItemText primary="Berkas" primaryTypographyProps={{ style: { color: '#1E376D' } }} />
-                                {openBerkas ? <ExpandLess sx={{ color: '#1E376D' }} /> : <ExpandMore sx={{ color: '#1E376D' }} />}
-                            </Button>
-                        </ListItem>
-                        <Collapse in={openBerkas} timeout="auto" unmountOnExit>
-                            <List component="div" disablePadding>
-                                <ListItem 
-                                    sx={{ 
-                                        pl: 4, 
-                                        marginBottom: '10px',
-                                    }}
-                                >
-                                    <Button 
-                                        fullWidth
-                                        onClick={() => navigate('/berkascu')}
-                                        sx={{ 
-                                            color: '#1E376D', 
-                                            '&:hover': { 
-                                                backgroundColor: '#E0E0E0', 
-                                                color: '#003366', 
-                                            }, 
-                                        }}
-                                    >
-                                        <ListItemIcon sx={{ color: '#1E376D' }}><DescriptionIcon /></ListItemIcon>
-                                        <ListItemText primary="CU" primaryTypographyProps={{ style: { color: '#1E376D' } }} />
-                                    </Button>
-                                </ListItem>
-                                <ListItem 
-                                    sx={{ 
-                                        pl: 4, 
-                                        marginBottom: '10px',
-                                    }}
-                                > 
-                                    <Button 
-                                        fullWidth
-                                        onClick={() => navigate('/berkaspi')}
-                                        sx={{ 
-                                            color: '#1E376D', 
-                                            '&:hover': { 
-                                                backgroundColor: '#E0E0E0', 
-                                                color: '#003366', 
-                                            }, 
-                                        }}
-                                    >
-                                        <ListItemIcon sx={{ color: '#1E376D' }}><DescriptionIcon /></ListItemIcon>
-                                        <ListItemText primary="PI" primaryTypographyProps={{ style: { color: '#1E376D' } }} />
-                                    </Button>
-                                </ListItem>
-                            </List>
-                        </Collapse>
-                        <ListItem 
-                            sx={{ 
-                                marginBottom: '10px',
-                            }}
-                        >
-                            <Button 
-                                fullWidth
-                                onClick={() => navigate('/jadwal')}
-                                sx={{ 
-                                    color: '#1E376D', 
-                                    '&:hover': { 
-                                        backgroundColor: '#E0E0E0', 
-                                        color: '#003366', 
-                                    } 
-                                }}
-                            >
-                                <ListItemIcon sx={{ color: '#1E376D' }}><EventIcon /></ListItemIcon>
-                                <ListItemText primary="Jadwal" primaryTypographyProps={{ style: { color: '#1E376D' } }} />
-                            </Button>
-                        </ListItem>
-                        <ListItem 
-                            sx={{ 
-                                marginBottom: '10px',
-                            }}
-                        >
-                            <Button 
-                                fullWidth
-                                onClick={() => navigate('/hasil')} 
-                                sx={{ 
-                                    color: '#1E376D', 
-                                    '&:hover': { 
-                                        backgroundColor: '#E0E0E0', 
-                                        color: '#003366', 
-                                    } 
-                                }}
-                            >
-                                <ListItemIcon sx={{ color: '#1E376D' }}><StarIcon /></ListItemIcon>
-                                <ListItemText primary="Hasil" primaryTypographyProps={{ style: { color: '#1E376D' } }} />
-                            </Button>
-                        </ListItem>
-                    </List>
-                </Box>
+      return (
+        <Box sx={{ display: "flex", height: "100vh" }}>
+          {/* Sidebar */}
+          <Box
+            sx={{
+              width: "250px",
+              backgroundColor: "#FFFFFF",
+              padding: 2,
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "space-between",
+              borderRight: "2px solid #E0E0E0",
+              minHeight: "100vh",
+              height: "auto",
+              flexShrink: 0         
+            }}
+          >
+            <Box>
+              <Box sx={{ textAlign: "center", marginBottom: 0, marginRight: 8 }}>
+                <img src={Logo} alt="Logo Pilmapres" style={{ width: "120px" }} />
+              </Box>
+    
+              {/* Menu Navigasi */}
+              <List sx={{ padding: 0 }}>
+                <ListItem
+                  sx={{
+                    marginBottom: "10px",
+                    alignItems: "center"
+                  }}
+                >
+                  <Button
+                    fullWidth
+                    onClick={() => navigate("/dashboardmahasiswa")} // Tambahkan navigasi
+                    sx={{
+                      color: "#1E376D",
+                      display: "flex",
+                      justifyContent: "flex-start",
+                      "&:hover": {
+                        backgroundColor: "#E0E0E0",
+                        color: "#003366",
+                      },
+                    }}
+                  >
+                    <ListItemIcon sx={{ color: "#1E376D", minWidth: "30px", display: "flex", alignItems: "center" }}>
+                      <HomeIcon />
+                    </ListItemIcon>
+                    <ListItemText
+                      primary="Beranda"
+                      primaryTypographyProps={{ style: { color: "#1E376D", fontSize: "14px" } }}
+                      sx={{
+                        margin: 0,
+                        display: "flex",
+                        alignItems: "center"
+                      }}
+                    />
+                  </Button>
+                </ListItem>
+                <ListItem
+                  sx={{
+                    marginBottom: "10px",
+                  }}
+                >
+                  <Button
+                    fullWidth
+                    onClick={handleToggleBerkas}
+                    sx={{
+                      color: "#1E376D",
+                      display: "flex",
+                      justifyContent: "flex-start",
+                      "&:hover": {
+                        backgroundColor: "#E0E0E0",
+                        color: "#003366",
+                      },
+                    }}
+                  >
+                    <ListItemIcon sx={{ color: "#1E376D", minWidth: "30px", display: "flex", alignItems: "center" }}>
+                      <DescriptionIcon />
+                    </ListItemIcon>
+                    <ListItemText
+                      primary="Berkas"
+                      primaryTypographyProps={{ style: { color: "#1E376D", fontSize: "14px" } }}
+                      sx={{
+                        margin: 0,
+                        display: "flex",
+                        alignItems: "center"
+                      }}
+                    />
+                    {openBerkas ? (
+                      <ExpandLess sx={{ color: "#1E376D", marginRight: "50px" }} />
+                    ) : (
+                      <ExpandMore sx={{ color: "#1E376D", marginRight: "50px" }} />
+                    )}
+                  </Button>
+                </ListItem>
+                <Collapse in={openBerkas} timeout="auto" unmountOnExit>
+                  <List component="div" disablePadding>
+                    <ListItem
+                      sx={{
+                        pl: 4,
+                        marginBottom: "10px",
+                      }}
+                    >
+                      <Button
+                        fullWidth
+                        onClick={() => navigate("/berkascu")}
+                        sx={{
+                          color: "#1E376D",
+                          display: "flex",
+                          justifyContent: "flex-start",
+                          "&:hover": {
+                            backgroundColor: "#E0E0E0",
+                            color: "#003366",
+                          },
+                        }}
+                      >
+                        <ListItemIcon sx={{ color: "#1E376D", minWidth: "30px", display: "flex", alignItems: "center" }}>
+                          <DescriptionIcon />
+                        </ListItemIcon>
+                        <ListItemText
+                          primary="CU"
+                          primaryTypographyProps={{ style: { color: "#1E376D", fontSize: "14px" } }}
+                          sx={{
+                            margin: 0,
+                            display: "flex",
+                            alignItems: "center"
+                          }}
+                        />
+                      </Button>
+                    </ListItem>
+                    <ListItem
+                      sx={{
+                        pl: 4,
+                        marginBottom: "10px",
+                      }}
+                    >
+                      <Button
+                        fullWidth
+                        onClick={() => navigate("/berkaspi")}
+                        sx={{
+                          color: "#1E376D",
+                          display: "flex",
+                          justifyContent: "flex-start",
+                          "&:hover": {
+                            backgroundColor: "#E0E0E0",
+                            color: "#003366",
+                          },
+                        }}
+                      >
+                        <ListItemIcon sx={{ color: "#1E376D", minWidth: "30px", display: "flex", alignItems: "center" }}>
+                          <DescriptionIcon />
+                        </ListItemIcon>
+                        <ListItemText
+                          primary="PI"
+                          primaryTypographyProps={{ style: { color: "#1E376D", fontSize: "14px" } }}
+                          sx={{
+                            margin: 0,
+                            display: "flex",
+                            alignItems: "center"
+                          }}
+                        />
+                      </Button>
+                    </ListItem>
+                  </List>
+                </Collapse>
+                <ListItem
+                  sx={{
+                    marginBottom: "10px",
+                  }}
+                >
+                  <Button
+                    fullWidth
+                    onClick={() => navigate("/jadwal")}
+                    sx={{
+                      color: "#1E376D",
+                      display: "flex",
+                      justifyContent: "flex-start",
+                      "&:hover": {
+                        backgroundColor: "#E0E0E0",
+                        color: "#003366",
+                      },
+                    }}
+                  >
+                    <ListItemIcon sx={{ color: "#1E376D", minWidth: "30px", display: "flex", alignItems: "center" }}>
+                      <EventIcon />
+                    </ListItemIcon>
+                    <ListItemText
+                      primary="Jadwal"
+                      primaryTypographyProps={{ style: { color: "#1E376D", fontSize: "14px" } }}
+                      sx={{
+                        margin: 0,
+                        display: "flex",
+                        alignItems: "center"
+                      }}
+                    />
+                  </Button>
+                </ListItem>
+                <ListItem
+                  sx={{
+                    marginBottom: "10px",
+                  }}
+                >
+                  <Button
+                    fullWidth
+                    onClick={() => navigate("/hasil")}
+                    sx={{
+                      color: "#1E376D",
+                      display: "flex",
+                      justifyContent: "flex-start",
+                      "&:hover": {
+                        backgroundColor: "#E0E0E0",
+                        color: "#003366",
+                      },
+                    }}
+                  >
+                    <ListItemIcon sx={{ color: "#1E376D", minWidth: "30px", display: "flex", alignItems: "center" }}>
+                      <StarIcon />
+                    </ListItemIcon>
+                    <ListItemText
+                      primary="Hasil"
+                      primaryTypographyProps={{ style: { color: "#1E376D", fontSize: "14px" } }}
+                      sx={{
+                        margin: 0,
+                        display: "flex",
+                        alignItems: "center"
+                      }}
+                    />
+                  </Button>
+                </ListItem>
+              </List>
             </Box>
+          </Box>
             <Box sx={{ flexGrow: 1, backgroundColor: '#ffffff' }}>
-                <Paper elevation={1} sx={{ padding: 2, marginBottom: 3, backgroundColor: '#003366', borderRadius: 0 }}>
-                    <Typography variant="h4" sx={{ color: '#FFFFFF' }}>
+                <Paper elevation={1} sx={{ padding: 2, marginBottom: 0, backgroundColor: '#003366', borderRadius: 0 }}>
+                    <Typography variant="h5" sx={{ color: '#FFFFFF' }}>
                         Beranda
                     </Typography>
                     <IconButton
@@ -233,10 +316,10 @@ function DashboardMahasiswa() {
                 <Grid container spacing={1} justifyContent="center" alignItems="center">
                     <Grid item xs={12} sm={12}>
                         <Paper elevation={3} sx={{ padding: 2, textAlign: 'center', width: '100%' }}>
-                            <Typography variant="h3" sx={{ fontWeight: 'bold', color: '#1E376D', textAlign: 'center', marginBottom: 4, }}>
+                            <Typography variant="h4" sx={{ fontWeight: 'bold', color: '#1E376D', textAlign: 'center', marginBottom: -1, }}>
                                 Pemilihan Mahasiswa Berprestasi
                             </Typography>
-                            <Typography variant="h3" sx={{ fontWeight: 'bold', color: '#1E376D', textAlign: 'center', marginBottom: 4, }}>
+                            <Typography variant="h4" sx={{ fontWeight: 'bold', color: '#1E376D', textAlign: 'center', marginBottom: 4, }}>
                                 Politeknik Negeri Batam
                             </Typography>
                             <img 

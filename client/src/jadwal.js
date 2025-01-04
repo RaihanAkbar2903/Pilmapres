@@ -90,6 +90,7 @@ function Jadwal() {
 
   return (
     <Box sx={{ display: "flex", height: "100vh" }}>
+      {/* Sidebar */}
       <Box
         sx={{
           width: "250px",
@@ -104,32 +105,42 @@ function Jadwal() {
         }}
       >
         <Box>
-          <Box sx={{ textAlign: "center", marginBottom: 2 }}>
+          <Box sx={{ textAlign: "center", marginBottom: 0, marginRight: 8  }}>
             <img src={Logo} alt="Logo Pilmapres" style={{ width: "120px" }} />
           </Box>
+
+          {/* Menu Navigasi */}
           <List sx={{ padding: 0 }}>
             <ListItem
               sx={{
                 marginBottom: "10px",
+                alignItems: "center"
               }}
             >
               <Button
                 fullWidth
-                onClick={() => navigate("/dashboardmahasiswa")}
+                onClick={() => navigate("/dashboardmahasiswa")} // Tambahkan navigasi
                 sx={{
                   color: "#1E376D",
+                  display: "flex",
+                  justifyContent: "flex-start",
                   "&:hover": {
                     backgroundColor: "#E0E0E0",
                     color: "#003366",
                   },
                 }}
               >
-                <ListItemIcon sx={{ color: "#1E376D" }}>
+                <ListItemIcon sx={{ color: "#1E376D", minWidth: "30px", display: "flex", alignItems: "center" }}>
                   <HomeIcon />
                 </ListItemIcon>
                 <ListItemText
                   primary="Beranda"
-                  primaryTypographyProps={{ style: { color: "#1E376D" } }}
+                  primaryTypographyProps={{ style: { color: "#1E376D", fontSize: "14px" } }}
+                  sx={{
+                    margin: 0,
+                    display: "flex",
+                    alignItems: "center"
+                  }}
                 />
               </Button>
             </ListItem>
@@ -143,23 +154,30 @@ function Jadwal() {
                 onClick={handleToggleBerkas}
                 sx={{
                   color: "#1E376D",
+                  display: "flex",
+                  justifyContent: "flex-start",
                   "&:hover": {
                     backgroundColor: "#E0E0E0",
                     color: "#003366",
                   },
                 }}
               >
-                <ListItemIcon sx={{ color: "#1E376D" }}>
+                <ListItemIcon sx={{ color: "#1E376D", minWidth: "30px", display: "flex", alignItems: "center" }}>
                   <DescriptionIcon />
                 </ListItemIcon>
                 <ListItemText
                   primary="Berkas"
-                  primaryTypographyProps={{ style: { color: "#1E376D" } }}
+                  primaryTypographyProps={{ style: { color: "#1E376D", fontSize: "14px" } }}
+                  sx={{
+                    margin: 0,
+                    display: "flex",
+                    alignItems: "center"
+                  }}
                 />
                 {openBerkas ? (
-                  <ExpandLess sx={{ color: "#1E376D" }} />
+                  <ExpandLess sx={{ color: "#1E376D", marginRight: "50px" }} />
                 ) : (
-                  <ExpandMore sx={{ color: "#1E376D" }} />
+                  <ExpandMore sx={{ color: "#1E376D", marginRight: "50px" }} />
                 )}
               </Button>
             </ListItem>
@@ -176,18 +194,25 @@ function Jadwal() {
                     onClick={() => navigate("/berkascu")}
                     sx={{
                       color: "#1E376D",
+                      display: "flex",
+                      justifyContent: "flex-start",
                       "&:hover": {
                         backgroundColor: "#E0E0E0",
                         color: "#003366",
                       },
                     }}
                   >
-                    <ListItemIcon sx={{ color: "#1E376D" }}>
+                    <ListItemIcon sx={{ color: "#1E376D", minWidth: "30px", display: "flex", alignItems: "center" }}>
                       <DescriptionIcon />
                     </ListItemIcon>
                     <ListItemText
                       primary="CU"
-                      primaryTypographyProps={{ style: { color: "#1E376D" } }}
+                      primaryTypographyProps={{ style: { color: "#1E376D", fontSize: "14px" } }}
+                      sx={{
+                        margin: 0,
+                        display: "flex",
+                        alignItems: "center"
+                      }}
                     />
                   </Button>
                 </ListItem>
@@ -202,18 +227,25 @@ function Jadwal() {
                     onClick={() => navigate("/berkaspi")}
                     sx={{
                       color: "#1E376D",
+                      display: "flex",
+                      justifyContent: "flex-start",
                       "&:hover": {
                         backgroundColor: "#E0E0E0",
                         color: "#003366",
                       },
                     }}
                   >
-                    <ListItemIcon sx={{ color: "#1E376D" }}>
+                    <ListItemIcon sx={{ color: "#1E376D", minWidth: "30px", display: "flex", alignItems: "center" }}>
                       <DescriptionIcon />
                     </ListItemIcon>
                     <ListItemText
                       primary="PI"
-                      primaryTypographyProps={{ style: { color: "#1E376D" } }}
+                      primaryTypographyProps={{ style: { color: "#1E376D", fontSize: "14px" } }}
+                      sx={{
+                        margin: 0,
+                        display: "flex",
+                        alignItems: "center"
+                      }}
                     />
                   </Button>
                 </ListItem>
@@ -229,18 +261,25 @@ function Jadwal() {
                 onClick={() => navigate("/jadwal")}
                 sx={{
                   color: "#1E376D",
+                  display: "flex",
+                  justifyContent: "flex-start",
                   "&:hover": {
                     backgroundColor: "#E0E0E0",
                     color: "#003366",
                   },
                 }}
               >
-                <ListItemIcon sx={{ color: "#1E376D" }}>
+                <ListItemIcon sx={{ color: "#1E376D", minWidth: "30px", display: "flex", alignItems: "center" }}>
                   <EventIcon />
                 </ListItemIcon>
                 <ListItemText
                   primary="Jadwal"
-                  primaryTypographyProps={{ style: { color: "#1E376D" } }}
+                  primaryTypographyProps={{ style: { color: "#1E376D", fontSize: "14px" } }}
+                  sx={{
+                    margin: 0,
+                    display: "flex",
+                    alignItems: "center"
+                  }}
                 />
               </Button>
             </ListItem>
@@ -254,18 +293,25 @@ function Jadwal() {
                 onClick={() => navigate("/hasil")}
                 sx={{
                   color: "#1E376D",
+                  display: "flex",
+                  justifyContent: "flex-start",
                   "&:hover": {
                     backgroundColor: "#E0E0E0",
                     color: "#003366",
                   },
                 }}
               >
-                <ListItemIcon sx={{ color: "#1E376D" }}>
+                <ListItemIcon sx={{ color: "#1E376D", minWidth: "30px", display: "flex", alignItems: "center" }}>
                   <StarIcon />
                 </ListItemIcon>
                 <ListItemText
                   primary="Hasil"
-                  primaryTypographyProps={{ style: { color: "#1E376D" } }}
+                  primaryTypographyProps={{ style: { color: "#1E376D", fontSize: "14px" } }}
+                  sx={{
+                    margin: 0,
+                    display: "flex",
+                    alignItems: "center"
+                  }}
                 />
               </Button>
             </ListItem>
@@ -282,7 +328,7 @@ function Jadwal() {
             borderRadius: 0,
           }}
         >
-          <Typography variant="h4" sx={{ color: "#FFFFFF" }}>
+          <Typography variant="h5" sx={{ color: "#FFFFFF" }}>
             Jadwal
           </Typography>
           <IconButton
@@ -319,7 +365,7 @@ function Jadwal() {
               }}
             >
               <Typography
-                variant="h3"
+                variant="h4"
                 gutterBottom
                 sx={{
                   fontWeight: "bold",
